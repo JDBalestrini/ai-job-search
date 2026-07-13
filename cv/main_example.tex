@@ -16,6 +16,13 @@
 \renewcommand*{\firstnamestyle}[1]{{\fontsize{34}{36}\bfseries\upshape\color{color1}#1}}
 \renewcommand*{\lastnamestyle}[1]{{\fontsize{34}{36}\bfseries\upshape\color{color1}#1}}
 \renewcommand*{\sectionstyle}[1]{{\sectionfont\color{color1}#1}}
+% ATS-safe labels: moderncv/FontAwesome glyphs can extract as emoji or icon
+% names. Keep the blue accent, but use plain text characters in the PDF text.
+\renewcommand*{\labelitemi}{\strut\textcolor{color1}{\bfseries -}}
+\renewcommand*{\labelitemii}{\strut\textcolor{color1}{\bfseries -}}
+\renewcommand*{\labelitemiii}{\strut\textcolor{color1}{\bfseries -}}
+\renewcommand*{\labelitemiv}{\labelitemiii}
+\renewcommand*{\listitemsymbol}{\labelitemi~}
 
 \usepackage[utf8]{inputenc}
 \usepackage{hyperref}
@@ -32,21 +39,27 @@
 
 % personal data
 \name{[First]}{[Last]}
-\address{[Your Address, City, Country]}{}{}
-\phone[mobile]{[+XX XXXXXXXXXX]}
-\email{[your.email@example.com]}
-\extrainfo{\href{[https://linkedin.com/in/your-profile]}{LinkedIn}, \href{[https://github.com/your-username]}{GitHub}}
 
 \begin{document}
 
 \makecvtitle
+\vspace{-12pt}
+\begin{center}
+\small
+[Your Address, City, Country] \quad|\quad
+[+XX XXXXXXXXXX] \quad|\quad
+\href{mailto:[your.email@example.com]}{[your.email@example.com]} \quad|\quad
+\href{[https://linkedin.com/in/your-profile]}{LinkedIn} \quad|\quad
+\href{[https://github.com/your-username]}{GitHub}
+\end{center}
+\vspace{6pt}
 
 % ============================================================
 %     PROFILE STATEMENT
 % ============================================================
 
 \vspace{6pt}
-\small{[Write a 3-5 line profile statement tailored to the role you're applying for. Focus on what makes you uniquely qualified. Example: "Data scientist with a PhD in [field] and X years of industry experience. Combines deep domain expertise in [domain] with strong applied machine learning and Python development skills. Experienced in developing end-to-end ML pipelines, from data ingestion to stakeholder-facing dashboards."]}
+\small{[Write a 3-5 line profile statement tailored to the role you are applying for. Focus on what makes you uniquely qualified. Example: Data scientist with a PhD in [field] and X years of industry experience. Combines deep domain expertise in [domain] with strong applied machine learning and Python development skills. Experienced in developing end-to-end ML pipelines, from data ingestion to stakeholder-facing dashboards.]}
 
 % ============================================================
 %     CORE COMPETENCIES
@@ -74,36 +87,36 @@
 
 \section{Professional Experience}
 \vspace{3pt}
-\begin{itemize}
 
 % --- Most Recent Role ---
-\item{\cventry{[YYYY--Present]}{[Job Title]}{[Company]}{[City, Country]}{}{\vspace{1pt}
+\noindent\textbf{[Job Title]} \hfill \textcolor{color1}{[YYYY-Present]}\\
+\textit{[Company], [City, Country]}
 \begin{itemize}
-    \item [Achievement or responsibility 1 - be specific, use numbers where possible]
-    \item [Achievement or responsibility 2]
-    \item [Achievement or responsibility 3]
-    \item [Achievement or responsibility 4]
-\end{itemize}}}
+    \item{} [Achievement or responsibility 1 - be specific, use numbers where possible]
+    \item{} [Achievement or responsibility 2]
+    \item{} [Achievement or responsibility 3]
+    \item{} [Achievement or responsibility 4]
+\end{itemize}
 
 \vspace{3pt}
 
 % --- Previous Role ---
-\item{\cventry{[YYYY--YYYY]}{[Job Title]}{[Company]}{[City, Country]}{}{\vspace{1pt}
+\noindent\textbf{[Job Title]} \hfill \textcolor{color1}{[YYYY-YYYY]}\\
+\textit{[Company], [City, Country]}
 \begin{itemize}
-    \item [Achievement or responsibility 1]
-    \item [Achievement or responsibility 2]
-    \item [Achievement or responsibility 3]
-\end{itemize}}}
+    \item{} [Achievement or responsibility 1]
+    \item{} [Achievement or responsibility 2]
+    \item{} [Achievement or responsibility 3]
+\end{itemize}
 
 \vspace{3pt}
 
 % --- Earlier Role ---
-\item{\cventry{[YYYY--YYYY]}{[Job Title]}{[Company]}{[City, Country]}{}{\vspace{1pt}
+\noindent\textbf{[Job Title]} \hfill \textcolor{color1}{[YYYY-YYYY]}\\
+\textit{[Company], [City, Country]}
 \begin{itemize}
-    \item [Achievement or responsibility 1]
-    \item [Achievement or responsibility 2]
-\end{itemize}}}
-
+    \item{} [Achievement or responsibility 1]
+    \item{} [Achievement or responsibility 2]
 \end{itemize}
 
 % ============================================================
@@ -112,19 +125,16 @@
 
 \section{Education}
 \vspace{1pt}
-\begin{itemize}
 
-\item{\cventry{[YYYY--YYYY]}{[Degree] in [Field]}{[Institution]}{[City, Country]}{}{\vspace{1pt}
-Thesis: ``[Thesis Title].'' [Brief description of research focus.]
-}}
+\noindent\textbf{[Degree] in [Field]} \hfill \textcolor{color1}{[YYYY-YYYY]}\\
+\textit{[Institution], [City, Country]}\par
+Thesis: [Thesis Title]. [Brief description of research focus.]
 
 \vspace{3pt}
 
-\item{\cventry{[YYYY--YYYY]}{[Degree] in [Field]}{[Institution]}{[City, Country]}{}{\vspace{1pt}
+\noindent\textbf{[Degree] in [Field]} \hfill \textcolor{color1}{[YYYY-YYYY]}\\
+\textit{[Institution], [City, Country]}\par
 [Brief description or key topics.]
-}}
-
-\end{itemize}
 
 % ============================================================
 %     LANGUAGES
@@ -133,7 +143,7 @@ Thesis: ``[Thesis Title].'' [Brief description of research focus.]
 \section{Languages}
 \vspace{1pt}
 \begin{itemize}
-\item [Language 1] (native), [Language 2] (fluent), [Language 3] (intermediate).
+\item{} [Language 1] (native), [Language 2] (fluent), [Language 3] (intermediate).
 \end{itemize}
 
 % ============================================================
@@ -143,7 +153,7 @@ Thesis: ``[Thesis Title].'' [Brief description of research focus.]
 \section{Publications}
 \vspace{1pt}
 \begin{itemize}
-\item [Author(s)] ([Year]). [Title]. [Journal/Conference]. \href{[DOI_URL]}{DOI link}
+\item{} [Author(s)] ([Year]). [Title]. [Journal/Conference]. \href{[DOI_URL]}{DOI link}
 \end{itemize}
 
 % ============================================================
@@ -153,7 +163,7 @@ Thesis: ``[Thesis Title].'' [Brief description of research focus.]
 \section{Honors and Awards}
 \vspace{1pt}
 \begin{itemize}
-\item{\textbf{[Award Name]} -- [Event/Organization] ([Year]).}
+\item{\textbf{[Award Name]} - [Event/Organization] ([Year]).}
 \end{itemize}
 
 % ============================================================
