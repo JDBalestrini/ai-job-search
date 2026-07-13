@@ -91,7 +91,7 @@ def load_data():
         print("See tools/README_SALARY_TOOL.md for setup instructions.", file=sys.stderr)
         print("", file=sys.stderr)
         print("If you don't have salary data, the salary lookup", file=sys.stderr)
-        print("step will be skipped during /apply.", file=sys.stderr)
+        print("step will be skipped during the apply skill.", file=sys.stderr)
         sys.exit(1)
     try:
         with open(DATA_FILE, "r", encoding="utf-8") as f:

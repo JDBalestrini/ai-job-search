@@ -1,3 +1,5 @@
+<!-- LEGACY CLAUDE CODE REFERENCE: retained temporarily for migration validation. Active Codex workflows live in AGENTS.md and .agents/skills/. Do not use this file as active instruction. -->
+
 # /expand - Competency Expansion from Documents and Online Presence
 
 You are enriching the candidate profile by discovering competencies hidden in documents and public online presence. This command is additive only — it never modifies existing profile content, only extends it.

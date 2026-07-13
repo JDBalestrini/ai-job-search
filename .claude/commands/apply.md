@@ -1,3 +1,5 @@
+<!-- LEGACY CLAUDE CODE REFERENCE: retained temporarily for migration validation. Active Codex workflows live in AGENTS.md and .agents/skills/. Do not use this file as active instruction. -->
+
 # /apply - Drafter-Reviewer Job Application Workflow
 
 You are orchestrating a two-agent job application workflow. The job posting is provided below as `$ARGUMENTS` (either a URL or pasted text).

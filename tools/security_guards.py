@@ -3,20 +3,20 @@
 
 Run from anywhere: python tools/security_guards.py
 
-This repo ships pre-approved Claude Code permissions and CLI code that every
-fork user executes. These guards make the dangerous changes LOUD, not
-impossible: a PR that intentionally needs one of them must update the
-allowlists in this file in the same diff, so the change is explicit and
-reviewable rather than buried.
+This repo ships CLI code that every fork user may execute, plus a retained
+legacy Claude Code settings file for migration reference. These guards make
+dangerous changes LOUD, not impossible: a PR that intentionally needs one of
+them must update the allowlists in this file in the same diff, so the change
+is explicit and reviewable rather than buried.
 
 Checks:
-1. .claude/settings.json — every permissions.allow entry must be in the exact
-   allowlist below. Catches permission widening (e.g. Bash(*), Bash(curl:*)),
-   which would auto-approve commands on every fork.
-2. .gitignore — the personal-data ignore rules must all still be present.
+1. .claude/settings.json - if retained, every legacy permissions.allow entry
+   must be in the exact allowlist below. Catches permission widening in the
+   legacy reference file.
+2. .gitignore - the personal-data ignore rules must all still be present.
    Catches weakening that would make future users silently commit their
    tracker, profile exports, or application archives.
-3. .agents/**/package.json — no npm/bun lifecycle scripts (preinstall,
+3. .agents/**/package.json - no npm/bun lifecycle scripts (preinstall,
    install, postinstall, prepare, prepack) and no trustedDependencies.
    Catches code execution smuggled into `bun install`.
 
@@ -30,8 +30,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 errors: list[str] = []
 
-# The exact permission entries the template ships. A PR that adds or changes
-# an entry must add it here too - that is the point: the diff shows both.
+# The exact legacy Claude permission entries retained for migration reference.
+# Codex permissions are documented in AGENTS.md, SETUP.md, and
+# CODEX_MIGRATION.md rather than auto-approved through this JSON file.
 ALLOWED_PERMISSIONS = {
     "Skill(job-application-assistant)",
     "Bash(bun run:*)",

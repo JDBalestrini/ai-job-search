@@ -1,3 +1,5 @@
+<!-- LEGACY CLAUDE CODE REFERENCE: retained temporarily for migration validation. Active Codex workflows live in AGENTS.md and .agents/skills/. Do not use this file as active instruction. -->
+
 ---
 name: gemini-research-expert
 description: Use this agent when the user needs to perform research tasks, gather information from external sources, or investigate topics that require web searches and synthesis of information.

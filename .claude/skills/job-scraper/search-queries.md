@@ -1,3 +1,5 @@
+<!-- LEGACY CLAUDE CODE REFERENCE: retained temporarily for migration validation. Active Codex workflows live in AGENTS.md and .agents/skills/. Do not use this file as active instruction. -->
+
 # Search Queries for Job Scraper
 
 <!-- SETUP: Customize these queries based on your skills, target roles, and location -->

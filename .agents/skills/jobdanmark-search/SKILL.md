@@ -17,7 +17,6 @@ description: >
   work in denmark, employment denmark, job denmark, jobs near me denmark,
   apprentice denmark, internship denmark, part-time denmark, full-time denmark.
 context: fork
-allowed-tools: Bash(bun run .agents/skills/jobdanmark-search/cli/src/cli.ts *)
 ---
 
 # Jobdanmark Search Skill

@@ -1,3 +1,5 @@
+<!-- LEGACY CLAUDE CODE REFERENCE: retained temporarily for migration validation. Active Codex workflows live in AGENTS.md and .agents/skills/. Do not use this file as active instruction. -->
+
 # /rank - Triage Scraped Jobs into a Ranked Shortlist
 
 You are batch-scoring the jobs that `/scrape` has collected, so the user can decide where to spend `/apply` effort. `/scrape` finds and dedupes postings; `/apply` evaluates one at a time in depth. `/rank` is the bridge: it scores every new posting against the fit framework and returns a ranked shortlist.

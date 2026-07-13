@@ -1,6 +1,6 @@
 # Documents Folder
 
-This folder holds your actual career documents. The `/setup` command reads everything here and uses it to populate the candidate skill files under `.claude/skills/job-application-assistant/`. It is safe to re-run `/setup` as you add new documents — it merges intelligently and will never overwrite existing content without asking you first.
+This folder holds your actual career documents. The `setup` skill reads everything here and uses it to populate the candidate skill files under `.agents/skills/job-application-assistant/`. It is safe to re-run the `setup` skill as you add new documents — it merges intelligently and will never overwrite existing content without asking you first.
 
 ---
 
@@ -29,16 +29,16 @@ Your master CV — the most complete, unedited version of your professional reco
 
 **Supported formats:** `.pdf`, `.tex`
 
-**What `/setup` extracts:**
+**What `setup` skill extracts:**
 - Work experience (titles, companies, dates, bullet points)
 - Education (degrees, institutions, dates, thesis topics)
 - Technical skills
 - Awards and publications
 - Contact information
 
-**Naming:** Any filename works. If multiple files are present, `/setup` reads all of them and cross-references for consistency.
+**Naming:** Any filename works. If multiple files are present, `setup` skill reads all of them and cross-references for consistency.
 
-**Tip:** Keep your most comprehensive CV here (not a tailored variant). The skill files are the canonical source — tailored CVs are generated per application by `/apply`.
+**Tip:** Keep your most comprehensive CV here (not a tailored variant). The skill files are the canonical source — tailored CVs are generated per application by `the apply skill`.
 
 ---
 
@@ -50,7 +50,7 @@ Your LinkedIn profile exported as a PDF.
 
 **Supported formats:** `.pdf`
 
-**What `/setup` extracts:**
+**What `setup` skill extracts:**
 - Work experience and dates (cross-referenced against your CV)
 - Skills and endorsements
 - Education
@@ -60,7 +60,7 @@ Your LinkedIn profile exported as a PDF.
 - About/summary section (used to infer behavioral profile additions)
 - Recommendations received (may enrich reference context)
 
-**Naming:** Any filename works. Only one LinkedIn export is expected; if multiple are present, `/setup` uses the most recently modified one.
+**Naming:** Any filename works. Only one LinkedIn export is expected; if multiple are present, `setup` skill uses the most recently modified one.
 
 ---
 
@@ -70,7 +70,7 @@ Degree certificates, transcripts, and any official qualifications.
 
 **Supported formats:** `.pdf`
 
-**What `/setup` extracts:**
+**What `setup` skill extracts:**
 - Degree titles and official names (used to verify education entries)
 - Graduation dates
 - Grades or distinctions (if visible)
@@ -86,7 +86,7 @@ Reference letters from former managers, supervisors, or collaborators.
 
 **Supported formats:** `.pdf`, `.txt`, `.md`
 
-**What `/setup` extracts:**
+**What `setup` skill extracts:**
 - Referee name, title, and organization
 - Specific quotes and assessments (added to the references section of `01-candidate-profile.md`)
 - Competency language used by referees (adds behavioral signal to `02-behavioral-profile.md`)
@@ -99,7 +99,7 @@ Reference letters from former managers, supervisors, or collaborators.
 
 A record of past job applications. Each subfolder is one application.
 
-You can maintain these folders by hand, or let the **`/outcome`** command do it: it records progress updates and final results conversationally, archives the submitted drafts and the posting text, keeps `outcome.md` in the format below, and updates `job_search_tracker.csv` in the same step.
+You can maintain these folders by hand, or let the **`outcome` skill** command do it: it records progress updates and final results conversationally, archives the submitted drafts and the posting text, keeps `outcome.md` in the format below, and updates `job_search_tracker.csv` in the same step.
 
 **Subfolder naming:** `<company>_<role>` — lowercase, underscores for spaces.
 
@@ -113,7 +113,7 @@ applications/
 
 ### Files within each application folder
 
-**`job_posting.md`** — Paste the full job posting text here. Used by `/setup` to infer which skills and role types you have targeted, and to calibrate `04-job-evaluation.md`.
+**`job_posting.md`** — Paste the full job posting text here. Used by `setup` skill to infer which skills and role types you have targeted, and to calibrate `04-job-evaluation.md`.
 
 **`cover_letter.tex`** — The cover letter you actually submitted. Used to extract writing style patterns and structure for `06-cover-letter-templates.md`.
 
@@ -141,11 +141,11 @@ What would you do differently?
 Any signal about what they valued or didn't?
 ```
 
-`in_progress` marks an application that is still open (used by `/outcome` for interview-stage updates before a resolution). `/setup`'s calibration draws conclusions only from applications with a final status.
+`in_progress` marks an application that is still open (used by `outcome` skill for interview-stage updates before a resolution). `setup` skill's calibration draws conclusions only from applications with a final status.
 
-Application folders may also contain **`interview_prep_<stage>.md`** files written by `/interview` (one per interview stage, kept as history). `/setup` reads only the four files named above and ignores these.
+Application folders may also contain **`interview_prep_<stage>.md`** files written by the `interview` skill (one per interview stage, kept as history). `setup` skill reads only the four files named above and ignores these.
 
-**What `/setup` learns from outcome.md:**
+**What `setup` skill learns from outcome.md:**
 - Which role types and companies have led to interviews (signals strong fit areas)
 - Which applications did not progress (informs the experience match calibration in `04-job-evaluation.md`)
 - Interview feedback, if you recorded it, can surface new STAR candidates
@@ -154,9 +154,9 @@ Application folders may also contain **`interview_prep_<stage>.md`** files writt
 
 ## File Format Notes
 
-| Format | Readable by `/setup` | Notes |
+| Format | Readable by `setup` skill | Notes |
 |--------|--------------------------|-------|
-| `.pdf` | Yes | Parsed directly with the Read tool |
+| `.pdf` | Yes | Parsed directly with Codex file/PDF reading when available |
 | `.tex` | Yes | LaTeX source — structure and content both readable |
 | `.md` | Yes | Plain text |
 | `.txt` | Yes | Plain text |
@@ -165,7 +165,7 @@ Application folders may also contain **`interview_prep_<stage>.md`** files writt
 
 ---
 
-## Re-running `/setup`
+## Re-running `setup` skill
 
 The command is designed to be re-run as your document collection grows. Each run:
 
