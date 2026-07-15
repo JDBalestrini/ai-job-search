@@ -4,15 +4,31 @@ Step-by-step instructions for getting the AI Job Search framework running.
 
 ## 1. Prerequisites
 
-### Claude Code
+### OpenAI Codex
 
-Install Claude Code (Anthropic's CLI for Claude):
+Install OpenAI Codex CLI. Common install paths include:
 
 ```bash
-npm install -g @anthropic-ai/claude-code
+# macOS/Linux installer
+curl -fsSL https://chatgpt.com/codex/install.sh | sh
+
+# npm
+npm install -g @openai/codex
 ```
 
-You'll need an Anthropic API key or a Claude Pro/Team subscription. See the [Claude Code docs](https://docs.anthropic.com/en/docs/claude-code) for details.
+Windows PowerShell:
+
+```powershell
+powershell -ExecutionPolicy ByPass -c "irm https://chatgpt.com/codex/install.ps1 | iex"
+```
+
+Then verify:
+
+```bash
+codex --version
+```
+
+Run `codex` in this repository and sign in with ChatGPT or configure an API key, depending on your Codex setup.
 
 ### Python
 
@@ -27,6 +43,7 @@ On Windows, `py --version` is often the most reliable check. If your system expo
 ### Bun (for job search tools)
 
 The job portal CLIs (four Danish portals plus the country-agnostic `linkedin-search` and `freehire-search` tools) are written in TypeScript and run with Bun.
+Fork-local market skills may add more portal CLIs. In this workspace, the Canadian set includes fully or partially automated CLIs for Government of Canada Job Bank, EngineeringCareers.ca, Eluta, and Jobs by Workable, plus manual-search fallback CLIs for CivicJobs.ca and Indeed Canada where automated retrieval is blocked or disallowed.
 
 - macOS/Linux:
 
@@ -99,13 +116,13 @@ EOF
 
 ### Optional: pdftotext (for the ATS check)
 
-`/apply` runs an ATS parseability check on the compiled CV: it extracts the PDF's text layer and verifies contact details, reading order, and keyword coverage the way an applicant-tracking system sees them. This uses `pdftotext` from [poppler](https://poppler.freedesktop.org/), which is not part of TeX distributions:
+`apply` skill runs an ATS parseability check on the compiled CV: it extracts the PDF's text layer and verifies contact details, reading order, and keyword coverage the way an applicant-tracking system sees them. This uses `pdftotext` from [poppler](https://poppler.freedesktop.org/), which is not part of TeX distributions:
 
 - **macOS:** `brew install poppler`
 - **Debian/Ubuntu:** `sudo apt install poppler-utils`
 - **Windows:** `choco install poppler`
 
-If `pdftotext` is missing, `/apply` skips the mechanical check with a warning and falls back to a visual keyword review — everything else works normally.
+If `pdftotext` is missing, `apply` skill skips the mechanical check with a warning and falls back to a visual keyword review — everything else works normally.
 
 ## 2. Fork and clone
 
@@ -139,51 +156,53 @@ done
 
 For `linkedin-search` and `freehire-search` the install is optional: both have zero runtime dependencies and run with plain `bun`; `bun install` only pulls TypeScript dev types.
 
-If you're outside Denmark, you can generate an equivalent search skill for your local job board with `/add-portal` — it scaffolds the same CLI structure for any public portal and test-runs a live query before registering. See the "Job search tools" section in the README.
+If you're outside Denmark, you can generate an equivalent search skill for your local job board with `add-portal` skill — it scaffolds the same CLI structure for any public portal and test-runs a live query before registering. See the "Job search tools" section in the README.
 
 ## 4. Run the setup interview
 
-Start Claude Code in the repository:
+Start OpenAI Codex in the repository:
 
 ```bash
-claude
+codex
 ```
 
-Then run the onboarding:
+Then ask Codex:
 
+> Run the setup skill.
 ```
-/setup
-```
 
-Claude will offer three paths:
+Codex will offer three paths:
 
-- **Path A (documents folder):** Add your CV, LinkedIn export, diplomas, references, or past applications under `documents/`. Claude reads and cross-references them before proposing profile updates. This is best when you have several source files.
-- **Path B (single CV import):** Share one CV/resume by mentioning the file with `@` or pasting the text. Claude extracts it and asks follow-up questions for anything missing.
+- **Path A (documents folder):** Add your CV, LinkedIn export, diplomas, references, or past applications under `documents/`. Codex reads and cross-references them before proposing profile updates. This is best when you have several source files.
+- **Path B (single CV import):** Share one CV/resume by mentioning the file with `@` or pasting the text. Codex extracts it and asks follow-up questions for anything missing.
 - **Path C (interview mode):** Answer structured interview questions section by section.
 
-All three paths produce the same result: fully populated profile files.
+All three paths produce the same result: fully populated private profile files under `private_profile/`. This directory is gitignored; tracked repository files stay as sanitized instructions and examples.
 
 ### What gets populated
 
 | File | Content |
 |------|---------|
-| `CLAUDE.md` | Your full candidate profile |
-| `01-candidate-profile.md` | Structured education, experience, skills |
-| `02-behavioral-profile.md` | Behavioral assessment |
-| `04-job-evaluation.md` | Personalized skill match areas and career goals |
-| `05-cv-templates.md` | Profile statement templates for your background |
-| `07-interview-prep.md` | STAR examples from your experience |
-| `cv/main_example.tex` | Your LaTeX CV with actual details |
-| `search-queries.md` | Job search queries for `/scrape` |
+| `private_profile/01-candidate-profile.md` | Structured education, experience, skills |
+| `private_profile/02-behavioral-profile.md` | Behavioral assessment |
+| `private_profile/03-writing-style.md` | Writing style guidance |
+| `private_profile/04-job-evaluation.md` | Personalized skill match areas and career goals |
+| `private_profile/05-cv-templates.md` | Profile statement templates for your background |
+| `private_profile/06-cover-letter-templates.md` | Cover-letter patterns for your background |
+| `private_profile/07-interview-prep.md` | STAR examples from your experience |
+| `private_profile/cv/main.tex` | Your private LaTeX master CV source |
+| `private_profile/search-queries.md` | Job search queries for `job-scraper` skill |
+
+Do not replace placeholders in `AGENTS.md`, `.agents/skills/`, `cv/main_example.tex`, or `cover_letters/cover_example.tex`; those tracked files are public-safe examples.
 
 ### Re-running setup
 
 You can update specific sections later:
 
 ```
-/setup --section skills
-/setup --section experience
-/setup --section search
+the setup skill --section skills
+the setup skill --section experience
+the setup skill --section search
 ```
 
 The `--section search` option is especially useful as your priorities evolve. It re-runs the search configuration interview and suggests role types you may not have considered based on your full profile.
@@ -192,30 +211,30 @@ The `--section search` option is especially useful as your priorities evolve. It
 
 If you have salary data (from a union, salary survey, Glassdoor, or personal research):
 
-1. **Option A:** Create `salary_data.json` manually in the repo root (see `tools/README_SALARY_TOOL.md` for the format)
+1. **Option A:** Create `salary_data.json` manually in the repo root (see `tools/README_SALARY_TOOL.md` for the format). The file is gitignored.
 2. **Option B:** Convert from Excel:
    ```bash
    pip install openpyxl
    python3 tools/convert_salary_excel.py path/to/salary-data.xlsx --source "My Salary Data 2025"
    ```
 
-This creates `salary_data.json` which the `/apply` workflow uses for salary benchmarking. If you skip this step, salary lookup is simply omitted.
+This creates gitignored `salary_data.json` which the `apply` skill workflow uses for salary benchmarking. If you skip this step, salary lookup is simply omitted.
 
 ## 6. Test the workflow
 
 Find a job posting you're interested in, then:
 
 ```
-/apply https://jobindex.dk/job/1234567
+the apply skill https://jobindex.dk/job/1234567
 ```
 
 Or paste the job description directly:
 
 ```
-/apply [paste job posting text here]
+the apply skill [paste job posting text here]
 ```
 
-Claude will:
+Codex will:
 1. Evaluate the fit against your profile
 2. Ask if you want to proceed
 3. Draft a tailored CV and cover letter
@@ -224,7 +243,7 @@ Claude will:
 
 ## 7. Compile your documents
 
-After `/apply` creates the LaTeX files:
+After `apply` skill creates the LaTeX files:
 
 ```bash
 # Bash / zsh / Git Bash
@@ -238,12 +257,12 @@ Set-Location cv; lualatex main_<company>.tex; Set-Location ..
 Set-Location cover_letters; xelatex cover_<company>_<role>.tex; Set-Location ..
 ```
 
-These commands apply to the stock templates (moderncv CV, `cover.cls` cover letter). If you'd rather use your own LaTeX template, run `/add-template` — it captures the template's compile engine, fonts, style rules, and page limit, test-compiles it, and wires it into `/apply`. See the "LaTeX templates" section in the README.
+These commands apply to the stock templates (moderncv CV, `cover.cls` cover letter). If you'd rather use your own LaTeX template, run `add-template` skill — it captures the template's compile engine, fonts, style rules, and page limit, test-compiles it, and wires it into `apply` skill. See the "LaTeX templates" section in the README.
 
 ## Troubleshooting
 
 ### "salary_data.json not found"
-This is expected if you haven't set up salary benchmarking. The `/apply` workflow skips this step automatically.
+This is expected if you haven't set up salary benchmarking. The `apply` skill workflow skips this step automatically.
 
 ### Job search CLI tools not working
 Make sure Bun is installed and you ran `bun install` in each CLI directory. The tools require network access to fetch job listings.
@@ -257,7 +276,9 @@ Make sure Bun is installed and you ran `bun install` in each CLI directory. The 
 The cover letter template expects fonts in `cover_letters/OpenFonts/fonts/`. Make sure this directory exists and contains the Lato and Raleway font files.
 
 ### Stale `.claude/settings.local.json` from an older clone
-Shared Claude Code permissions now live in `.claude/settings.json` (scoped to `bun run`, `python salary_lookup.py`, and `python3 salary_lookup.py`). Earlier versions of this repo committed a broader `.claude/settings.local.json` that pre-approved `Bash(curl:*)`, `Bash(python:*)` and `Bash(bun:*)`. If you cloned before that change, git leaves the old file behind in your working copy, and its permissions still apply on top of `settings.json`. Delete it (or trim it to your own personal overrides):
+The `.claude/settings.json` file is retained only as a legacy Claude Code reference. Codex uses its own runtime approval flow for shell commands, file writes, network access, and destructive actions. Keep approvals scoped to the command being run.
+
+Earlier versions of this repo could leave a stale `.claude/settings.local.json` in older clones. It has no role in the Codex port and can be removed if present:
 
 ```bash
 rm .claude/settings.local.json

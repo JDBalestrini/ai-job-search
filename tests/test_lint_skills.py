@@ -37,14 +37,18 @@ class LinterRepoFixture(unittest.TestCase):
             encoding="utf-8",
         )
 
-        command = self.root / ".claude" / "commands" / "setup.md"
-        command.parent.mkdir(parents=True)
-        command.write_text("# /setup - Test setup command\n", encoding="utf-8")
-
-        skill = self.root / ".claude" / "skills" / "example" / "SKILL.md"
+        skill = self.root / ".agents" / "skills" / "example" / "SKILL.md"
         skill.parent.mkdir(parents=True)
         skill.write_text(
             "---\nname: example\ndescription: Example skill\n---\n",
+            encoding="utf-8",
+        )
+
+        legacy = self.root / ".claude" / "commands" / "setup.md"
+        legacy.parent.mkdir(parents=True)
+        legacy.write_text(
+            "<!-- LEGACY CLAUDE CODE REFERENCE: retained temporarily for migration validation. Active Codex workflows live in AGENTS.md and .agents/skills/. Do not use this file as active instruction. -->\n\n"
+            "# /setup - Test setup command\n",
             encoding="utf-8",
         )
 

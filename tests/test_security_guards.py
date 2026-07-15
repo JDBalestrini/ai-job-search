@@ -47,6 +47,8 @@ class GuardRepoFixture(unittest.TestCase):
         self.manifest.parent.mkdir(parents=True)
         self.write_manifest({"name": "example-cli", "scripts": {"start": "bun run src/cli.ts"}})
 
+        self.write_placeholder_files()
+
     def write_settings(self, allow):
         self.settings.write_text(json.dumps({"permissions": {"allow": list(allow)}}))
 
@@ -55,6 +57,19 @@ class GuardRepoFixture(unittest.TestCase):
 
     def write_manifest(self, data, path=None):
         (path or self.manifest).write_text(json.dumps(data))
+
+    def write_placeholder_files(self):
+        for relpath, placeholders in security_guards.TRACKED_PLACEHOLDER_RULES.items():
+            path = self.root / relpath
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text("\n".join(placeholders) + "\n", encoding="utf-8")
+        for relpath in security_guards.FORBIDDEN_WORKFLOW_PHRASES:
+            path = self.root / relpath
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(
+                "Generate tailored CVs from structured profile facts and sanitized skeletons.\n",
+                encoding="utf-8",
+            )
 
 
 class CleanTreeTests(GuardRepoFixture):
@@ -123,6 +138,42 @@ class GitignoreGuardTests(GuardRepoFixture):
         self.write_gitignore(list(security_guards.REQUIRED_IGNORE_RULES) + ["*.bak", "scratch/"])
         result = run_guards(self.root)
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+
+class PrivateProfileGuardTests(GuardRepoFixture):
+    def test_tracked_private_profile_file_fails(self):
+        subprocess.run(["git", "init"], cwd=self.root, capture_output=True, text=True, check=True)
+        private_file = self.root / "private_profile" / "01-candidate-profile.md"
+        private_file.parent.mkdir()
+        private_file.write_text("real candidate data\n", encoding="utf-8")
+        subprocess.run(
+            ["git", "add", "-f", "private_profile/01-candidate-profile.md"],
+            cwd=self.root,
+            capture_output=True,
+            text=True,
+            check=True,
+        )
+        result = run_guards(self.root)
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("private_profile", result.stdout)
+        self.assertIn("must not be tracked", result.stdout)
+
+    def test_missing_template_placeholder_fails(self):
+        path = self.root / "cv" / "main_example.tex"
+        path.write_text("[First]\n[Last]\n[Job Title]\n", encoding="utf-8")
+        result = run_guards(self.root)
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("required placeholder", result.stdout)
+        self.assertIn("[your.email@example.com]", result.stdout)
+
+    def test_forbidden_cv_copy_guidance_fails(self):
+        relpath = Path(".agents/skills/job-application-assistant/SKILL.md")
+        phrase = "Read the most relevant existing CV variant from `cv/` as a starting point"
+        (self.root / relpath).write_text(phrase + "\n", encoding="utf-8")
+        result = run_guards(self.root)
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("forbidden CV workflow phrase", result.stdout)
+        self.assertIn("supporting evidence only", result.stdout)
 
 
 class ManifestGuardTests(GuardRepoFixture):

@@ -1,8 +1,8 @@
-# CI for the framework itself: LaTeX smoke compiles, skill/command lint,
+# CI for the framework itself: LaTeX smoke compiles, Codex skill lint,
 # CLI typechecks, and (upstream only) placeholder integrity.
 #
-# Fork-friendly by design: forks personalize CLAUDE.md, the skill files, and
-# cv/main_example.tex via /setup, so the placeholder-integrity job and the
+# Fork-friendly by design: forks personalize AGENTS.md, the skill files, and
+# cv/main_example.tex via the setup skill, so the placeholder-integrity job and the
 # exact page-count/content assertions run only on the upstream template repo.
 # Compile success, lint correctness, and an extractable PDF text layer are
 # asserted everywhere.
@@ -13,9 +13,9 @@
 # CI runs typechecks and the checked-in fixture/mock test suites only; live
 # portal testing stays a local, on-demand step.
 #
-# Security posture: this template ships pre-approved Claude Code permissions
-# and CLI code that every fork user executes, so the security-guards job
-# fails PRs that widen settings.json permissions, weaken the personal-data
+# Security posture: this template ships CLI code that every fork user may
+# execute plus a retained legacy Claude settings reference, so the
+# security-guards job fails PRs that widen legacy settings.json permissions, weaken the personal-data
 # gitignore rules, or add package lifecycle scripts; dependency-review flags
 # newly introduced vulnerable/malicious dependencies. Honest limit: a PR can
 # edit this workflow itself, so these guards catch accidents and casual
@@ -36,7 +36,7 @@ permissions:
 
 jobs:
   lint:
-    name: Lint skills, commands, settings
+    name: Lint Codex skills and legacy settings
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
@@ -189,9 +189,9 @@ jobs:
               fail=1
             fi
           }
-          check CLAUDE.md '\[YOUR_NAME\]'
+          check AGENTS.md '\[YOUR_NAME\]'
           check cv/main_example.tex '\[YOUR_NAME\]'
           check cover_letters/cover_example.tex '\[YOUR NAME\]'
-          check .claude/skills/job-application-assistant/01-candidate-profile.md '<!-- SETUP'
-          check .claude/skills/job-application-assistant/04-job-evaluation.md '\[YOUR_PRIMARY_SKILLS\]'
+          check .agents/skills/job-application-assistant/01-candidate-profile.md '<!-- SETUP'
+          check .agents/skills/job-application-assistant/04-job-evaluation.md '\[YOUR_PRIMARY_SKILLS\]'
           exit $fail
