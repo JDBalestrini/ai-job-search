@@ -21,9 +21,11 @@ description: >
 context: fork
 ---
 
-# Jobbank Search Skill
+# Akademikernes Jobbank Denmark Search Skill
 
 Search live Danish job listings from [Akademikernes Jobbank](https://jobbank.dk) — Denmark's primary job portal for highly educated candidates. Uses the RSS feed for search (up to 100 results) and JSON-LD parsing for detailed job information. Jobbank may block automated requests with Cloudflare bot protection; if that happens, report the portal as unavailable and use web-search fallback instead of retrying.
+
+This skill is Denmark-specific. Do not confuse it with `canada-job-bank-search`, which searches the Government of Canada Job Bank.
 
 ## When to use this skill
 
