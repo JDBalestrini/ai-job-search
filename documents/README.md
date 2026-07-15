@@ -1,6 +1,6 @@
 # Documents Folder
 
-This folder holds your actual career documents. The `setup` skill reads everything here and uses it to populate the candidate skill files under `.agents/skills/job-application-assistant/`. It is safe to re-run the `setup` skill as you add new documents — it merges intelligently and will never overwrite existing content without asking you first.
+This folder holds your actual career documents. The `setup` skill reads everything here and uses it to populate ignored candidate files under `private_profile/`. It is safe to re-run the `setup` skill as you add new documents — it merges intelligently and will never overwrite existing content without asking you first.
 
 ---
 
@@ -8,17 +8,17 @@ This folder holds your actual career documents. The `setup` skill reads everythi
 
 ```
 documents/
-├── cv/                          # Your CV files (PDF or LaTeX)
-├── linkedin/                    # LinkedIn profile export (PDF)
-├── diplomas/                    # Degree certificates and transcripts
-├── references/                  # Reference letters
-├── applications/                # Past job applications
-│   └── <company>_<role>/
-│       ├── job_posting.md       # The original job posting (paste as text)
-│       ├── cover_letter.tex     # The cover letter you submitted
-│       ├── cv_draft.tex         # The CV variant you submitted
-│       └── outcome.md           # Result + notes (fill in after hearing back)
-└── README.md                    # This file
+|-- cv/                          # Your CV files (PDF or LaTeX)
+|-- linkedin/                    # LinkedIn profile export (PDF)
+|-- diplomas/                    # Degree certificates and transcripts
+|-- references/                  # Reference letters
+|-- applications/                # Past job applications
+|   `-- <company>_<role>/
+|       |-- job_posting.md       # The original job posting (paste as text)
+|       |-- cover_letter.tex     # The cover letter you submitted
+|       |-- cv_draft.tex         # The CV variant you submitted
+|       `-- outcome.md           # Result + notes (fill in after hearing back)
+`-- README.md                    # This tracked guide
 ```
 
 ---
@@ -88,7 +88,7 @@ Reference letters from former managers, supervisors, or collaborators.
 
 **What `setup` skill extracts:**
 - Referee name, title, and organization
-- Specific quotes and assessments (added to the references section of `01-candidate-profile.md`)
+- Specific quotes and assessments (added to the references section of `private_profile/01-candidate-profile.md`)
 - Competency language used by referees (adds behavioral signal to `02-behavioral-profile.md`)
 
 **Naming:** Use the referee's name, e.g. `reference_ole_frandsen.pdf`.
@@ -106,9 +106,9 @@ You can maintain these folders by hand, or let the **`outcome` skill** command d
 Examples:
 ```
 applications/
-├── acme_ml_engineer/
-├── bigcorp_software_engineer/
-└── consultco_ai_consultant/
+|-- acme_ml_engineer/
+|-- bigcorp_software_engineer/
+`-- consultco_ai_consultant/
 ```
 
 ### Files within each application folder
@@ -169,7 +169,7 @@ Application folders may also contain **`interview_prep_<stage>.md`** files writt
 
 The command is designed to be re-run as your document collection grows. Each run:
 
-1. Reads the current state of all skill files
+1. Reads the current state of all private profile files
 2. Compares extracted document content against what's already there
 3. Only proposes changes for content that is genuinely new or conflicting
 4. Never silently overwrites — conflicts are shown explicitly for your decision

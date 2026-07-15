@@ -71,10 +71,14 @@ Then ask for the skill by name:
 Recommended local validation:
 
 ```bash
-python -m pytest
+py -m pytest
 python tools/lint_skills.py
 python tools/security_guards.py
 ```
+
+On Windows PowerShell, prefer `py -m pytest` for the test suite. Before reporting
+pytest as missing, check both `py -m pytest --version` and
+`python -m pytest --version`, and report which launcher/interpreter is active.
 
 Optional when LaTeX is installed:
 

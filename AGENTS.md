@@ -1,6 +1,6 @@
 # AI Job Search - Codex Repository Instructions
 
-This repository is a personal job application workspace for OpenAI Codex. Treat it as a private, source-grounded career assistant workspace for the candidate described in this file and in `.agents/skills/job-application-assistant/`.
+This repository is a job application workspace for OpenAI Codex. Treat tracked files as durable, non-personal framework instructions and sanitized examples. Candidate-specific data belongs only in the ignored `private_profile/` directory or ignored generated outputs.
 
 ## Role
 
@@ -13,55 +13,34 @@ Codex helps with:
 5. Interview preparation using the tracked application archive and STAR examples.
 6. Search, ranking, tracking, setup, template registration, portal generation, outcome logging, reset, and upskilling workflows through skills in `.agents/skills/`.
 
-## Candidate Profile
+## Private Profile Contract
 
-The setup skill populates these placeholders. Until then, do not infer missing facts.
+The `setup` skill writes candidate facts to `private_profile/`. That directory is gitignored and must never be tracked. Until setup has populated private profile files, do not infer missing candidate facts.
 
-### Identity
-- **Name:** [YOUR_NAME]
-- **Location:** [YOUR_CITY], [YOUR_COUNTRY] ([YOUR_COMMUTE_CONSTRAINTS])
-- **Languages:** [YOUR_LANGUAGES]
-- **Status:** [YOUR_EMPLOYMENT_STATUS]
-- **LinkedIn headline:** "[YOUR_LINKEDIN_HEADLINE]"
+Expected private files:
 
-### Education
-- **[DEGREE_LEVEL] in [FIELD]** ([YEAR_START]-[YEAR_END]) - [INSTITUTION]
-  - Thesis: "[THESIS_TITLE]"
-  - Topics: [KEY_TOPICS]
+- `private_profile/01-candidate-profile.md`
+- `private_profile/02-behavioral-profile.md`
+- `private_profile/03-writing-style.md`
+- `private_profile/04-job-evaluation.md`
+- `private_profile/05-cv-templates.md`
+- `private_profile/06-cover-letter-templates.md`
+- `private_profile/07-interview-prep.md`
+- `private_profile/search-queries.md`
+- `private_profile/cv/main.tex` or another private master CV source
 
-### Professional Experience
-- **[JOB_TITLE]** ([START_DATE] - [END_DATE]) - **[COMPANY]** ([LOCATION])
-  - [KEY_RESPONSIBILITY_1]
-  - [KEY_RESPONSIBILITY_2]
-  - [KEY_ACHIEVEMENT]
-
-### Technical Skills
-- **Primary:** [YOUR_PRIMARY_SKILLS]
-- **Secondary:** [YOUR_SECONDARY_SKILLS]
-- **Domain:** [YOUR_DOMAIN_EXPERTISE]
-- **Software:** [YOUR_TOOLS_AND_SOFTWARE]
-
-### Behavioral Profile
-- **[TRAIT_1]** - [DESCRIPTION]
-- **[TRAIT_2]** - [DESCRIPTION]
-- **Strengths:** [YOUR_STRENGTHS]
-- **Growth areas:** [YOUR_GROWTH_AREAS]
-- **Thrives in:** [YOUR_IDEAL_ENVIRONMENT]
-
-### Career Direction
-- **What excites the candidate:** [PASSION_1], [PASSION_2]
-- **Target sectors:** [SECTOR_1], [SECTOR_2]
-- **Deal-breakers:** [DEALBREAKER_1], [DEALBREAKER_2]
+Tracked files under `.agents/skills/job-application-assistant/`, `.agents/skills/job-scraper/search-queries.md`, `cv/main_example.tex`, and `cover_letters/cover_example.tex` are sanitized examples and structural references only. Do not replace their placeholders with real candidate information.
 
 ## Active Repo Structure
 
-- `AGENTS.md` - active Codex repository instructions and high-level candidate profile.
+- `AGENTS.md` - active Codex repository instructions. Keep non-personal.
+- `private_profile/` - ignored candidate profile files, private CV source, and personalized search queries.
 - `.agents/skills/` - Codex skills for workflows and job portal CLIs.
-- `.agents/skills/job-application-assistant/` - candidate profile, behavioral profile, writing style, job evaluation, CV, cover letter, and interview reference files.
-- `cv/` - LaTeX CV variants.
+- `.agents/skills/job-application-assistant/` - sanitized profile, behavioral, writing style, job evaluation, CV, cover letter, and interview reference examples.
+- `cv/` - sanitized stock CV template and ignored generated CV variants.
 - `cover_letters/` - LaTeX cover letters and `cover.cls`.
 - `templates/` - custom templates registered by the add-template skill.
-- `documents/` - private source materials and application archives.
+- `documents/` - private source materials and application archives. Only `documents/README.md` and optional `.gitkeep` files are tracked.
 - `job_scraper/` - scraper state.
 - `upskill/` - learning-plan reports.
 - `job_search_tracker.csv` - personal application tracker, gitignored.
@@ -92,6 +71,7 @@ Use the converted skills in `.agents/skills/` for the major workflows:
 - Do not fabricate skills, tools, employers, dates, metrics, education, publications, awards, or outcomes.
 - Reframe emphasis, not substance. A tailored bullet must pass the interview backtrack test: the candidate can defend it without saying "what I actually meant was..."
 - Company-specific claims must be verified independently before inclusion.
+- Never write candidate facts, contact details, salary data, tracker data, source documents, or application archives into tracked files. Use `private_profile/`, ignored generated outputs, and ignored tracker/archive files.
 - A named AI tool may appear in a CV, cover letter, or interview answer only when the candidate profile explicitly says the candidate used that named tool in the underlying work. Using Codex to prepare an application is not evidence that the candidate used Codex during the job or project.
 - Do not automatically replace old Claude Code claims with Codex claims. If a legacy profile explicitly documents Claude Code usage in a real project, preserve that fact. If it does not, omit named tool claims.
 
@@ -100,7 +80,7 @@ Use the converted skills in `.agents/skills/` for the major workflows:
 After creating or updating a CV or cover letter, re-read the generated source files and verify all items below before presenting the result.
 
 ### Factual Accuracy
-- [ ] All claims match `AGENTS.md` and `.agents/skills/job-application-assistant/01-candidate-profile.md`.
+- [ ] All claims match `private_profile/01-candidate-profile.md` and other relevant `private_profile/` profile files.
 - [ ] Job titles, dates, company names, locations, and contact details are correct.
 - [ ] Company-specific claims have been independently verified.
 - [ ] Named AI-tool claims are explicitly supported by the candidate profile.

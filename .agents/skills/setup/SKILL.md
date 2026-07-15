@@ -2,13 +2,13 @@
 name: setup
 version: 1.0.0
 description: >
-  Onboard or update the candidate profile, profile skill files, CV template, and search queries. Trigger when the user asks to set up, configure, import a CV, scan documents, or update a profile section.
+  Onboard or update the private candidate profile, private CV source, and search queries. Trigger when the user asks to set up, configure, import a CV, scan documents, or update a profile section.
 context: fork
 ---
 
 # setup workflow - Profile Onboarding
 
-You are running the onboarding setup for the AI Job Search framework. Your goal is to collect the user's professional information and populate all profile files so the `the apply skill` workflow works out of the box.
+You are running the onboarding setup for the AI Job Search framework. Your goal is to collect the user's professional information and populate ignored files under `private_profile/` so the `the apply skill` workflow works out of the box without writing personal data to tracked repository files.
 
 There are three paths into setup. Step 0 picks the right one; all three converge on Step 3 (file generation) and Step 4 (confirmation).
 
@@ -60,7 +60,7 @@ Wait for the user's choice. If they pick A but the folder is still empty, tell t
 
 ## Path A: Documents Folder
 
-Reads structured documents in `documents/`, cross-references them for consistency, and merges extracted data into the seven profile skill files. Read-before-write and idempotent: changes already present will not be proposed again.
+Reads structured documents in `documents/`, cross-references them for consistency, and merges extracted data into the seven private profile files. Read-before-write and idempotent: changes already present will not be proposed again.
 
 Follow these steps **exactly in order**.
 
@@ -82,19 +82,21 @@ I will Read these and cross-reference before proposing any changes.
 
 If every subfolder is empty, stop and tell the user to populate the folder. Point at `documents/README.md` for the layout.
 
-### Step A2: Read Existing Skill Files
+### Step A2: Read Existing Private Profile Files
 
-Read these in parallel before extracting anything. You must know what is already there to make the merge intelligent.
+Read these in parallel before extracting anything. You must know what is already there to make the merge intelligent. If a file is missing, use the matching sanitized example under `.agents/skills/job-application-assistant/` only as a structural reference, then create the private file when writing.
 
-- `.agents/skills/job-application-assistant/01-candidate-profile.md`
-- `.agents/skills/job-application-assistant/02-behavioral-profile.md`
-- `.agents/skills/job-application-assistant/03-writing-style.md`
-- `.agents/skills/job-application-assistant/04-job-evaluation.md`
-- `.agents/skills/job-application-assistant/05-cv-templates.md`
-- `.agents/skills/job-application-assistant/06-cover-letter-templates.md`
-- `.agents/skills/job-application-assistant/07-interview-prep.md`
+- `private_profile/01-candidate-profile.md`
+- `private_profile/02-behavioral-profile.md`
+- `private_profile/03-writing-style.md`
+- `private_profile/04-job-evaluation.md`
+- `private_profile/05-cv-templates.md`
+- `private_profile/06-cover-letter-templates.md`
+- `private_profile/07-interview-prep.md`
 
 Hold this content in context throughout Path A. Do not re-read.
+
+If `private_profile/05-cv-templates.md` contains an `ACTIVE-TEMPLATE` managed block, preserve it exactly. Setup may add private profile statement guidance below the block, but it must not remove, rewrite, or deactivate a custom template override.
 
 ### Step A3: Parse Documents
 
@@ -118,7 +120,7 @@ After reading, proceed to Step A4 without intermediate output. The user sees a c
 
 ### Step A4: Cross-Reference Check
 
-Before mapping anything to skill files, check for inconsistencies:
+Before mapping anything to private profile files, check for inconsistencies:
 
 - Date mismatches between CV / LinkedIn / diploma
 - Title mismatches across documents for the same role
@@ -144,9 +146,9 @@ If no inconsistencies, state "No cross-reference issues found." and continue.
 
 ### Step A5: Build Change Sets
 
-For each skill file, compare extracted document content against the current file content from Step A2. Build two buckets.
+For each private profile file, compare extracted document content against the current file content from Step A2. Build two buckets.
 
-**Additive changes:** entirely new content not in the skill file in any form. Examples: a certification not in `01-candidate-profile.md`, a new endorsement skill, a referee not yet listed, a new behavioral quote from a reference letter, a new award.
+**Additive changes:** entirely new content not in the private profile file in any form. Examples: a certification not in `private_profile/01-candidate-profile.md`, a new endorsement skill, a referee not yet listed, a new behavioral quote from a reference letter, a new award.
 
 **Conflicting changes:** content that touches something already in a skill file but disagrees. Examples: a different date range for an existing job, a different job title for the same role, a different graduation date than what is recorded.
 
@@ -180,7 +182,7 @@ Present the full change set before writing anything.
 ```
 ## Proposed Additive Changes
 
-### 01-candidate-profile.md
+### private_profile/01-candidate-profile.md
 - [ ] New certification: [title], [issuer], [date] - extracted from LinkedIn
 - [ ] New reference: [name, title, company]
   Quote: "[relevant quote]"
@@ -203,7 +205,7 @@ Wait for the response. Apply only the confirmed items.
 ```
 ## Conflict 1 of [N]: Job title - [COMPANY]
 
-**Current in 01-candidate-profile.md:**
+**Current in private_profile/01-candidate-profile.md:**
 [TITLE_A] - [COMPANY] ([START]-[END])
 
 **Proposed (from LinkedIn export):**
@@ -230,7 +232,7 @@ Documents cover skills, experience, education, references, and behavioral signal
 - Commute or location constraints (if not visible from CV)
 - Job search configuration (use the questions from Path C Section 9 below)
 
-Then proceed to Step 3 to populate the non-skill files (`AGENTS.md`, `cv/main_example.tex`, `.agents/skills/job-scraper/search-queries.md`). Step 3 will detect that the seven skill files are already populated and skip those substeps.
+Then proceed to Step 3 to populate any remaining private files (`private_profile/cv/main.tex`, `private_profile/search-queries.md`). Step 3 will detect that the seven private profile files are already populated and skip those substeps.
 
 ---
 
@@ -332,20 +334,22 @@ This proactive suggestion step helps users discover career paths they might not 
 
 ---
 
-## Step 3: Generate Profile Files
+## Step 3: Generate Private Profile Files
 
-Once data collection is complete, generate or finish populating the following files. **For Path A**, the seven skill files are already populated by Step A7; check each before writing and skip if its content is no longer placeholder text.
+Once data collection is complete, generate or finish populating the following ignored private files. **For Path A**, the seven private profile files are already populated by Step A7; check each before writing and skip if its content is no longer placeholder text.
 
-### 1. Update `AGENTS.md`
-Replace all `[PLACEHOLDER]` tokens with the user's actual information. Keep the structure, workflow, and verification checklist intact.
+Before writing, create `private_profile/` and `private_profile/cv/` if they do not exist. Do not write candidate facts into `AGENTS.md`, `.agents/skills/`, `cv/main_example.tex`, `cover_letters/cover_example.tex`, README files, or other tracked files.
 
-### 2. Populate `01-candidate-profile.md` *(Path B and C; skip if Path A populated it)*
+### 1. Populate `private_profile/01-candidate-profile.md` *(Path B and C; skip if Path A populated it)*
 Write the full candidate profile with structured sections: Identity, Education, Professional Experience, Independent Projects, Technical Skills, Publications, Awards, References.
 
-### 3. Populate `02-behavioral-profile.md` *(Path B and C; skip if Path A populated it)*
+### 2. Populate `private_profile/02-behavioral-profile.md` *(Path B and C; skip if Path A populated it)*
 Write the behavioral profile based on assessment results or synthesized answers.
 
-### 4. Update `04-job-evaluation.md` *(Path B and C; skip if Path A populated it)*
+### 3. Populate or update `private_profile/03-writing-style.md` *(Path B and C; skip if Path A populated it)*
+Write any writing-style observations from the user's past materials or interview answers. If there is not enough evidence, copy the sanitized structure and mark the evidence gaps clearly.
+
+### 4. Update `private_profile/04-job-evaluation.md` *(Path B and C; skip if Path A populated it)*
 Replace skill match areas with the user's actual skills:
 - Strong match areas: [their primary skills]
 - Moderate match areas: [their secondary skills]
@@ -353,16 +357,25 @@ Replace skill match areas with the user's actual skills:
 
 Update career goals and motivation filters with their actual preferences.
 
-### 5. Update `05-cv-templates.md` *(Path B and C; skip if Path A populated it)*
-Add role-specific profile statement templates based on their background.
+### 5. Update `private_profile/05-cv-templates.md` *(Path B and C; skip if Path A populated it)*
+Add role-specific profile statement templates based on their background. If an `ACTIVE-TEMPLATE` managed block is present, leave it at the top of the file unchanged and add profile guidance below it.
 
-### 6. Update `07-interview-prep.md` *(Path B and C; skip if Path A populated it)*
+### 6. Update `private_profile/06-cover-letter-templates.md` *(Path B and C; skip if Path A populated it)*
+Add cover-letter patterns and reusable structures grounded in the user's actual materials.
+
+### 7. Update `private_profile/07-interview-prep.md` *(Path B and C; skip if Path A populated it)*
 Create STAR examples from their actual experience (at least 3-4 examples). Path A leaves STAR stubs under "## STAR Candidates (Complete Manually)" rather than full examples; if any stubs are present, mention them in Step 4 so the user knows to flesh them out.
 
-### 7. Update `cv/main_example.tex`
-Replace placeholder personal data with their actual name, contact info, and add their education and most recent experience entries.
+### 8. Generate `private_profile/cv/main.tex`
+Create the user's private master CV source as a private evidence document and visual reference, not as the future application output template. If `private_profile/05-cv-templates.md` has an active template override, use that template skeleton and manifest as the structural reference. Otherwise, use `cv/main_example.tex` as the stock moderncv structural reference. Replace placeholders with the user's actual name, contact info, education, and representative source-backed experience entries only in `private_profile/cv/main.tex`. Leave tracked templates sanitized.
 
-### 8. Generate `.agents/skills/job-scraper/search-queries.md`
+When writing or updating `private_profile/05-cv-templates.md`, make the source contract explicit:
+- The structured candidate profile files are the authoritative fact store.
+- The populated private master CV is supporting evidence and visual reference only.
+- The active tracked template skeleton defines LaTeX structure.
+- `the apply skill` must generate a fresh tailored CV for each posting and must not copy the private master CV with minor edits.
+
+### 9. Generate `private_profile/search-queries.md`
 Replace all placeholder tokens in the search queries file with the user's actual information from Section 9 (or the equivalent follow-up questions in Path A's Step A7):
 - Replace `[YOUR_PRIMARY_ROLE_TYPE]`, `[YOUR_PRIMARY_JOB_TITLE]`, etc. with actual role titles
 - Replace `[YOUR_KEY_SKILL]`, `[YOUR_DOMAIN_KEYWORD_1]`, etc. with actual skills and domain terms
@@ -382,14 +395,15 @@ Present a summary:
 
 > **Setup complete!** Here's what was generated:
 >
-> - `AGENTS.md` - Your full candidate profile
-> - `.agents/skills/job-application-assistant/01-candidate-profile.md` - Structured profile
-> - `.agents/skills/job-application-assistant/02-behavioral-profile.md` - Behavioral assessment
-> - `.agents/skills/job-application-assistant/04-job-evaluation.md` - Personalized evaluation framework
-> - `.agents/skills/job-application-assistant/05-cv-templates.md` - CV templates with your profile statements
-> - `.agents/skills/job-application-assistant/07-interview-prep.md` - STAR examples from your experience
-> - `cv/main_example.tex` - Your LaTeX CV template
-> - `.agents/skills/job-scraper/search-queries.md` - Job search queries for `the job-scraper skill`
+> - `private_profile/01-candidate-profile.md` - Structured profile
+> - `private_profile/02-behavioral-profile.md` - Behavioral assessment
+> - `private_profile/03-writing-style.md` - Writing style guidance
+> - `private_profile/04-job-evaluation.md` - Personalized evaluation framework
+> - `private_profile/05-cv-templates.md` - CV templates with your profile statements
+> - `private_profile/06-cover-letter-templates.md` - Cover-letter patterns
+> - `private_profile/07-interview-prep.md` - STAR examples from your experience
+> - `private_profile/cv/main.tex` - Your private LaTeX master CV
+> - `private_profile/search-queries.md` - Job search queries for `the job-scraper skill`
 >
 > **Try it out:**
 > - Run `the job-scraper skill` to search for matching jobs right now
@@ -404,7 +418,7 @@ If Path A left any STAR stubs in `07-interview-prep.md`, also note:
 
 ## Design Principles
 
-- Three onboarding paths converge on the same skill files. Step 0 picks the right path based on what's in `documents/`. Steps 3 and 4 are shared.
+- Three onboarding paths converge on the same ignored private profile files. Step 0 picks the right path based on what's in `documents/`. Steps 3 and 4 are shared.
 - Path A is read-before-write and idempotent. Re-running it as documents are added does not duplicate or overwrite existing content; conflicts are surfaced for explicit resolution.
 - Path A labels inferred behavioral or style additions so the user can review them critically before relying on them.
 - Each section in Path C is a natural conversation, not a form. The user can skip optional sections.

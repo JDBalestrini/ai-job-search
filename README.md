@@ -107,7 +107,7 @@ codex
 
 Ask Codex: `Run the setup skill.`
 
-The `setup` skill offers three paths: read your `documents/` folder if you have one populated (CV PDF, LinkedIn export, diplomas, reference letters, past applications), import a single CV pasted in chat, or walk through an interview. It auto-detects what you have and asks. Documents-folder mode is idempotent and safe to re-run as you add more material; see `documents/README.md` for the layout.
+The `setup` skill offers three paths: read your `documents/` folder if you have one populated (CV PDF, LinkedIn export, diplomas, reference letters, past applications), import a single CV pasted in chat, or walk through an interview. It auto-detects what you have and asks. Documents-folder mode is idempotent and safe to re-run as you add more material; see `documents/README.md` for the layout. Setup writes candidate facts to ignored files under `private_profile/`; tracked files stay sanitized.
 
 ### 4. Search for jobs
 
@@ -143,64 +143,32 @@ The `setup`, `job-scraper`, and `apply` skills form the core workflow. Seven mor
 
 ```
 ai-job-search/
-├── AGENTS.md                          # Main candidate profile + workflow rules
-├── .claude/
-│   ├── commands/
-│   │   ├── apply.md                   # the apply skill workflow (drafter-reviewer)
-│   │   ├── setup.md                   # the setup skill onboarding (documents folder, CV import, or interview)
-│   │   ├── expand.md                  # the expand skill competency enrichment from documents and online presence
-│   │   ├── add-template.md            # the add-template skill register custom LaTeX templates
-│   │   ├── add-portal.md              # the add-portal skill generate a job-portal search skill for your market
-│   │   ├── rank.md                    # the rank skill triage scraped jobs into a ranked shortlist
-│   │   ├── outcome.md                 # the outcome skill record application results, archive materials
-│   │   ├── interview.md               # the interview skill stage-specific prep pack + mock interview
-│   │   └── reset.md                   # the reset skill wipe profile data or documents folder
-│   ├── skills/
-│   │   ├── job-application-assistant/  # Core application skill
-│   │   │   ├── SKILL.md               # Skill definition
-│   │   │   ├── 01-candidate-profile.md # Your education, experience, skills
-│   │   │   ├── 02-behavioral-profile.md# PI/DISC/personality assessment
-│   │   │   ├── 03-writing-style.md    # Tone, structure, do's and don'ts
-│   │   │   ├── 04-job-evaluation.md   # Scoring framework for job fit
-│   │   │   ├── 05-cv-templates.md     # LaTeX CV structure + tailoring rules
-│   │   │   ├── 06-cover-letter-templates.md # LaTeX cover letter templates
-│   │   │   └── 07-interview-prep.md   # STAR examples + interview framework
-│   │   ├── job-scraper/               # Job search orchestration
-│   │   └── upskill/                   # the upskill skill gap analysis and learning plan
-│   └── settings.json                  # legacy Claude Code permissions reference
-├── .agents/skills/                    # Job portal CLI tools
-│   ├── jobbank-search/                # Akademikernes Jobbank (Denmark)
-│   ├── jobdanmark-search/             # Jobdanmark.dk (Denmark)
-│   ├── jobindex-search/               # Jobindex.dk (Denmark)
-│   ├── jobnet-search/                 # Jobnet.dk (Denmark, government portal)
-│   ├── linkedin-search/               # LinkedIn public job listings (country-agnostic)
-│   └── freehire-search/               # freehire.dev tech job aggregator (multi-market, REST API)
-├── cv/
-│   └── main_example.tex               # moderncv LaTeX template
-├── cover_letters/
-│   ├── cover.cls                      # Custom cover letter LaTeX class
-│   ├── cover_example.tex              # Example cover letter (structural reference + CI smoke test)
-│   └── OpenFonts/                     # Lato + Raleway fonts
-├── templates/                         # Custom templates registered via the add-template skill
-│   └── README.md                      # Folder layout instructions
-├── documents/                         # Career source materials for the setup skill Path A and the expand skill
-│   ├── README.md                      # Folder layout instructions
-│   ├── cv/                            # Master CV (PDF or .tex)
-│   ├── linkedin/                      # LinkedIn profile export (PDF)
-│   ├── diplomas/                      # Degree certificates and transcripts
-│   ├── references/                    # Reference letters
-│   └── applications/                  # Past application records (<company>_<role>/)
-├── .github/workflows/ci.yml           # CI: LaTeX smoke compiles, skill lint, CLI typechecks
-├── salary_lookup.py                   # Salary benchmarking tool (BYO data)
-├── tools/
-│   ├── convert_salary_excel.py        # Convert salary Excel to JSON
-│   ├── lint_skills.py                 # CI lint for skills, commands, settings.json
-│   ├── security_guards.py             # CI guards: permission allowlist, gitignore rules, manifests
-│   └── README_SALARY_TOOL.md          # Salary tool setup instructions
-├── job_scraper/                       # Scraper state (seen jobs, results)
-├── upskill/                           # the upskill skill report output (markdown reports per run)
-├── job_search_tracker.csv             # Application tracking spreadsheet
-└── SETUP.md                           # Detailed setup guide
+|-- AGENTS.md                          # Durable non-personal Codex repository instructions
+|-- private_profile/                   # Ignored candidate profile, private CV source, personalized queries
+|-- .claude/                           # Retained legacy Claude Code reference files
+|-- .agents/skills/                    # Active Codex skills and job portal CLI tools
+|   |-- job-application-assistant/      # Sanitized application examples and framework references
+|   |-- job-scraper/                   # Job search orchestration plus sanitized query example
+|   |-- setup/                         # Private profile onboarding workflow
+|   |-- apply/                         # Drafter-reviewer application workflow
+|   |-- rank/                          # Scraped-job triage workflow
+|   |-- interview/                     # Stage-specific interview prep workflow
+|   `-- ...                            # Other skills: outcome, expand, upskill, add-template, add-portal, reset
+|-- cv/
+|   `-- main_example.tex               # Sanitized moderncv LaTeX template
+|-- cover_letters/
+|   |-- cover.cls                      # Custom cover letter LaTeX class
+|   |-- cover_example.tex              # Sanitized example cover letter and CI smoke test
+|   `-- OpenFonts/                     # Lato + Raleway fonts
+|-- templates/                         # Custom templates registered via the add-template skill
+|-- documents/                         # Ignored career source materials; README.md remains tracked
+|-- .github/workflows/ci.yml           # CI: LaTeX smoke compiles, skill lint, CLI typechecks
+|-- salary_lookup.py                   # Salary benchmarking tool (BYO ignored data)
+|-- tools/                             # Conversion, lint, security, and salary helper tools
+|-- job_scraper/                       # Ignored scraper state and results
+|-- upskill/                           # Ignored upskill report output
+|-- job_search_tracker.csv             # Ignored application tracking spreadsheet
+`-- SETUP.md                           # Detailed setup guide
 ```
 
 ## How `apply` skill works
@@ -234,13 +202,17 @@ If you prefer editing files directly instead of using `setup` skill:
 
 | File | What to change |
 |------|---------------|
-| `AGENTS.md` | Your full profile (name, education, experience, skills, goals) |
-| `01-candidate-profile.md` | Structured version of your CV data |
-| `02-behavioral-profile.md` | Your behavioral assessment or self-assessment |
-| `04-job-evaluation.md` | Skill match areas, career goals, motivation filters |
-| `05-cv-templates.md` | Profile statement templates for different role types |
-| `07-interview-prep.md` | Your STAR examples from actual experience |
-| `search-queries.md` | Job search queries for your skills and location |
+| `private_profile/01-candidate-profile.md` | Structured version of your CV data |
+| `private_profile/02-behavioral-profile.md` | Your behavioral assessment or self-assessment |
+| `private_profile/03-writing-style.md` | Your observed writing style and tone guidance |
+| `private_profile/04-job-evaluation.md` | Skill match areas, career goals, motivation filters |
+| `private_profile/05-cv-templates.md` | Profile statement templates for different role types |
+| `private_profile/06-cover-letter-templates.md` | Cover-letter patterns grounded in your materials |
+| `private_profile/07-interview-prep.md` | Your STAR examples from actual experience |
+| `private_profile/search-queries.md` | Job search queries for your skills and location |
+| `private_profile/cv/main.tex` | Your private master CV source |
+
+Do not put real candidate data in `AGENTS.md`, `.agents/skills/`, `cv/main_example.tex`, or `cover_letters/cover_example.tex`; those are tracked instructions and sanitized examples.
 
 ### Updating your search queries
 
@@ -286,6 +258,8 @@ For **country-agnostic** starting points outside Denmark, the repo ships two por
 
 - **`linkedin-search`** — built on LinkedIn's public, unauthenticated `jobs-guest` endpoints. Field-agnostic, **zero runtime dependencies** (runs with just `bun`), and takes the search location as an explicit flag, so it works for any market out of the box (`-l "Berlin, Germany"`, `-l "Mumbai, Maharashtra, India"`, `-l "Remote"`, …). Intended for **personal use only** — automated access is against LinkedIn's Terms of Service, so keep volume low. See `.agents/skills/linkedin-search/SKILL.md`.
 - **`freehire-search`** — queries the [freehire.dev](https://freehire.dev) aggregator's public REST API (JSON, no API key). Tech-focused (software, data, engineering, DevOps, remote), multi-market via facet flags (`--region`, `--country`, `--remote`), and **zero runtime dependencies**. Unlike the HTML-scraping Danish portals, results come back structured (skills, seniority, category). The backend is MIT-licensed and [self-hostable](https://github.com/strelov1/freehire) — point `FREEHIRE_API_URL` at your own instance if you prefer. See `.agents/skills/freehire-search/SKILL.md`.
+
+Canadian portal skills can be added in a fork for Canada-focused searches. This workspace includes examples for `canada-job-bank-search`, `engineering-careers-search`, `eluta-search`, `workable-search`, `civicjobs-search`, and `indeed-canada-search`. Each skill documents its access method and limits in `url-reference.md`; some portals are manual-search fallbacks when robots rules, terms, or live access controls make automated retrieval inappropriate.
 
 ### Salary benchmarking
 

@@ -43,6 +43,7 @@ On Windows, `py --version` is often the most reliable check. If your system expo
 ### Bun (for job search tools)
 
 The job portal CLIs (four Danish portals plus the country-agnostic `linkedin-search` and `freehire-search` tools) are written in TypeScript and run with Bun.
+Fork-local market skills may add more portal CLIs. In this workspace, the Canadian set includes fully or partially automated CLIs for Government of Canada Job Bank, EngineeringCareers.ca, Eluta, and Jobs by Workable, plus manual-search fallback CLIs for CivicJobs.ca and Indeed Canada where automated retrieval is blocked or disallowed.
 
 - macOS/Linux:
 
@@ -176,20 +177,23 @@ Codex will offer three paths:
 - **Path B (single CV import):** Share one CV/resume by mentioning the file with `@` or pasting the text. Codex extracts it and asks follow-up questions for anything missing.
 - **Path C (interview mode):** Answer structured interview questions section by section.
 
-All three paths produce the same result: fully populated profile files.
+All three paths produce the same result: fully populated private profile files under `private_profile/`. This directory is gitignored; tracked repository files stay as sanitized instructions and examples.
 
 ### What gets populated
 
 | File | Content |
 |------|---------|
-| `AGENTS.md` | Your full candidate profile |
-| `01-candidate-profile.md` | Structured education, experience, skills |
-| `02-behavioral-profile.md` | Behavioral assessment |
-| `04-job-evaluation.md` | Personalized skill match areas and career goals |
-| `05-cv-templates.md` | Profile statement templates for your background |
-| `07-interview-prep.md` | STAR examples from your experience |
-| `cv/main_example.tex` | Your LaTeX CV with actual details |
-| `search-queries.md` | Job search queries for `job-scraper` skill |
+| `private_profile/01-candidate-profile.md` | Structured education, experience, skills |
+| `private_profile/02-behavioral-profile.md` | Behavioral assessment |
+| `private_profile/03-writing-style.md` | Writing style guidance |
+| `private_profile/04-job-evaluation.md` | Personalized skill match areas and career goals |
+| `private_profile/05-cv-templates.md` | Profile statement templates for your background |
+| `private_profile/06-cover-letter-templates.md` | Cover-letter patterns for your background |
+| `private_profile/07-interview-prep.md` | STAR examples from your experience |
+| `private_profile/cv/main.tex` | Your private LaTeX master CV source |
+| `private_profile/search-queries.md` | Job search queries for `job-scraper` skill |
+
+Do not replace placeholders in `AGENTS.md`, `.agents/skills/`, `cv/main_example.tex`, or `cover_letters/cover_example.tex`; those tracked files are public-safe examples.
 
 ### Re-running setup
 
@@ -207,14 +211,14 @@ The `--section search` option is especially useful as your priorities evolve. It
 
 If you have salary data (from a union, salary survey, Glassdoor, or personal research):
 
-1. **Option A:** Create `salary_data.json` manually in the repo root (see `tools/README_SALARY_TOOL.md` for the format)
+1. **Option A:** Create `salary_data.json` manually in the repo root (see `tools/README_SALARY_TOOL.md` for the format). The file is gitignored.
 2. **Option B:** Convert from Excel:
    ```bash
    pip install openpyxl
    python3 tools/convert_salary_excel.py path/to/salary-data.xlsx --source "My Salary Data 2025"
    ```
 
-This creates `salary_data.json` which the `apply` skill workflow uses for salary benchmarking. If you skip this step, salary lookup is simply omitted.
+This creates gitignored `salary_data.json` which the `apply` skill workflow uses for salary benchmarking. If you skip this step, salary lookup is simply omitted.
 
 ## 6. Test the workflow
 
