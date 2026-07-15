@@ -8,7 +8,9 @@ All CVs use the moderncv LaTeX package with the "banking" style and "blue" color
 
 **Output file:** `cv/main_<company>.tex`
 **Compile with:** **lualatex** on MiKTeX/TeX Live. pdflatex often fails on modern MiKTeX installs with `fontawesome5` font-expansion errors; lualatex handles the same sources cleanly.
-**Master reference:** `cv/main_example.tex` (comprehensive CV with all competencies, experience, and achievements - use as source when building targeted CVs)
+**Template skeleton:** `cv/main_example.tex` (sanitized LaTeX structure and command reference only)
+
+Candidate facts come from the private structured profile (`private_profile/01-candidate-profile.md`). A populated private resume may be used as supporting evidence or visual reference, but it is not the output template and must not be copied with minor edits.
 
 ### Compile command
 
@@ -16,7 +18,7 @@ All CVs use the moderncv LaTeX package with the "banking" style and "blue" color
 cd cv && lualatex -interaction=nonstopmode main_<company>.tex
 ```
 
-Expected output: `Output written on main_<company>.pdf (2 pages, ...)`. Any page count other than 2 is a failure that must be fixed before presenting to the user.
+Expected stock-template output: `Output written on main_<company>.pdf (2 pages, ...)`. Any page count other than the active template's configured limit is a failure that must be fixed before presenting to the user.
 
 ## Document Structure
 
@@ -98,6 +100,35 @@ Two related patterns are fine and should be kept:
 
 ## Section-by-Section Tailoring
 
+## Fact Source vs. Document Wording
+
+Treat these as separate inputs:
+
+- **Authoritative facts:** structured private profile files. Preserve exact dates, titles, employers, education, metrics, tools, and constraints from these files.
+- **Supporting evidence:** populated private resumes or prior generated CVs. Use them to clarify wording or source evidence only.
+- **LaTeX skeleton:** the active sanitized template. Preserve class, commands, spacing, fonts, compile engine, and page limit.
+- **Generated output:** a fresh job-specific CV created after scoring and selection.
+
+Do not use the private master resume as a final document to copy. Each application must select only the strongest relevant content for the posting.
+
+## Mandatory Tailoring Ledger
+
+Before writing a CV, extract required and preferred qualifications from the posting. Score each candidate experience, project, skill group, award group, and bullet for relevance, uniqueness, and credibility. Decide whether to select, shorten, omit, or reorder it. Keep the ledger in working memory and summarize it to the user after generation.
+
+Tailoring decisions should:
+
+- Prioritize posting requirements over default resume order.
+- Omit or condense low-relevance older roles, low-signal awards, generic skills, and duplicated bullets.
+- Reorder skills and bullets so the strongest supported requirements appear first.
+- Rewrite selected bullets to emphasize the target role while preserving factual meaning.
+- Leave genuine gaps visible instead of adding unsupported keywords.
+
+## Anti-Copy Check
+
+After drafting, compare the generated CV body to the private master resume when available. Revise before compiling if the generated CV retains substantially all master resume roles, projects, skills, and bullets or reads like a full copy with minor edits.
+
+Exclude unavoidable identical text from the comparison: names, contact details, degree titles, employer names, role titles, dates, locations, metrics, section headings, LaTeX commands, and technical terms. Exact reuse of a few already-optimal high-relevance bullets is acceptable when the tailoring ledger justifies it.
+
 ### Profile Statement / Elevator Pitch (Best Practice)
 This is the most important section to customize. It appears right after `\makecvtitle`.
 
@@ -151,7 +182,7 @@ If there is a gap in your employment history:
 After writing the CV and before presenting to the user, always compile and visually inspect the PDF. Iterate until the layout is clean. Workflow:
 
 1. Run `lualatex -interaction=nonstopmode main_<company>.tex`
-2. Check the output page count: must be exactly 2
+2. Check the output page count: must match the active template's configured page limit
 3. Inspect the PDF via the file/PDF inspection capability and visually inspect both pages
 4. Check for **orphaned entries**: a `\cventry` title line must never sit alone at the bottom of page 1 with its bullets on page 2
 
@@ -191,9 +222,9 @@ What to check in the extraction:
 - **Reading order.** The stock banking style is single-column, so extraction order matches visual order. Custom templates (via `the add-template skill`) with sidebars or multi-column layouts can interleave unrelated lines; if extraction order is scrambled, the user is trading ATS compatibility for looks and should be told.
 - **Keyword coverage.** Match the posting's required/preferred terms against the extracted text, in the posting's language. Prefer the posting's exact term over a synonym when it is truthfully applicable - ATS matching is often literal. Never add a keyword the profile does not support.
 
-## Page Budget - Hard 2-Page Limit
+## Page Budget - Stock 2-Page Limit
 
-The CV **must** fit on exactly 2 pages when compiled. Use these content limits as a guide:
+The stock moderncv fallback **must** fit on exactly 2 pages when compiled. Custom templates may set a different limit in their private active-template block and manifest; use that active limit instead. Use these stock content limits as a guide:
 
 | Section | Max budget |
 |---------|-----------|

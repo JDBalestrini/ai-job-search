@@ -1,8 +1,14 @@
 # Cover Letter Templates and Tailoring Guide
 
-## Template: Custom cover.cls (XeLaTeX)
+## Active Custom Template Overrides
 
-Cover letters use a custom LaTeX document class (`cover.cls`) with Lato/Raleway fonts.
+When `private_profile/06-cover-letter-templates.md` declares an active cover-letter template, that private configuration wins over this stock fallback. In particular, when the active CV template is `jd-resume`, use `templates/cover-letter/jd-resume/template.tex` and its manifest so the resume and cover letter are generated as a visually coordinated pair.
+
+Do not fall back to the stock `cover.cls` design unless the active matching cover-letter template is missing or fails and the user approves the fallback.
+
+## Stock Template: Custom cover.cls (XeLaTeX)
+
+The stock fallback cover letter uses a custom LaTeX document class (`cover.cls`) with Lato/Raleway fonts. This is not visually coordinated with `jd-resume`; use it only when no active matching template is configured.
 
 **Output file:** `cover_letters/cover_<company>_<role>.tex`
 **Compile with:** XeLaTeX (cover.cls requires fontspec)
@@ -14,14 +20,14 @@ Cover letters use a custom LaTeX document class (`cover.cls`) with Lato/Raleway 
 cd cover_letters && xelatex -interaction=nonstopmode cover_<company>_<role>.tex
 ```
 
-Expected output: `Output written on cover_<company>_<role>.pdf (1 page, ...)`. Any page count other than 1 is a failure that must be fixed before presenting to the user.
+Expected output is usually 1 page, but longer cover letters are allowed when the content warrants it. Page count alone is not a failure; cramped formatting, filler content, or an awkward isolated signature block is a failure.
 
 ## Compile-and-Inspect Loop (MANDATORY)
 
 After writing the cover letter and before presenting to the user, always compile and visually inspect the PDF. Iterate until the layout is clean:
 
 1. Run `xelatex -interaction=nonstopmode cover_<company>_<role>.tex`
-2. Confirm page count is exactly 1 and compile succeeded
+2. Confirm compile succeeded and the page count is appropriate for the content
 3. Inspect the PDF via the file/PDF inspection capability and visually check: signature fits at the bottom, no text cut off, bullet font matches body
 
 ### Known template pitfall: itemize inside `\lettercontent{}`
@@ -125,10 +131,10 @@ The font wrapper is mandatory - if you just move `\begin{itemize}` outside `\let
 - If you know the team: "Dear [Company] hiring team,"
 - Generic: "Dear [Company]," (avoid "To whom it may concern")
 
-### Length - Hard 1-Page Limit
-- Target: 1 page including signature block
-- Maximum: **never exceed 1 page**
-- **Word budget: 250-300 words** of body text (not counting LaTeX markup). This is the safe maximum. 350 words will overflow.
+### Length
+- Target: concise, often 1 page including signature block
+- Longer than one page is allowed when the extra content is useful, specific, and grounded
+- **Word budget:** 250-300 words is a safe default for a short letter. Use more only when the posting or application context justifies it.
 - **Always count**: opening paragraph + bullet list paragraph + closing paragraph = 3 blocks. Add a 4th only if the others are short.
 - When adding company-specific content, trim other content to compensate rather than adding net length
 
