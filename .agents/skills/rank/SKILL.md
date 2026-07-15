@@ -34,8 +34,10 @@ Follow these steps **in order**.
 3. Select candidates: entries with status `new` (or all non-applied entries with `--all`), minus the exclusion set, filtered by the focus area if one was given.
 4. If no candidates remain, say so ("Nothing new to rank - run the job-scraper skill to find fresh postings") and stop.
 5. Read the scoring framework and profile **once**:
-   - `.agents/skills/job-application-assistant/04-job-evaluation.md`
-   - `.agents/skills/job-application-assistant/01-candidate-profile.md`
+   - `private_profile/04-job-evaluation.md`
+   - `private_profile/01-candidate-profile.md`
+
+If either private profile file is missing, stop and ask the user to run `the setup skill` before ranking. Do not fall back to tracked placeholder examples for candidate facts.
 
 State how many jobs will be ranked before proceeding.
 
@@ -43,7 +45,7 @@ State how many jobs will be ranked before proceeding.
 
 ## Step 2: Batch-Fetch and Score
 
-Dispatch parallel `general-purpose` subagents via the **Codex subagent workflow**, ~5 jobs per subagent (a single subagent is fine for â‰¤5 jobs). Token-efficiency rules, consistent with `the apply skill`:
+Dispatch parallel `general-purpose` subagents via the **Codex subagent workflow**, ~5 jobs per subagent (a single subagent is fine for <=5 jobs). Token-efficiency rules, consistent with `the apply skill`:
 
 - Pass each subagent everything it needs **inline in the prompt** - the job list (title, company, URL) and a compact scoring rubric extracted from the files you read in Step 1: the strong/moderate/weak skill match areas, direct/adjacent experience domains, behavioral thrive/drain factors, career goals, deal-breakers, and the location constraints. Do **not** make agents re-read the profile files.
 - subagents fetch each posting URL with web fetch and score **only from actually fetched content**. If a URL is dead, redirects to a listing page, or the posting has expired, the subagent marks that job `expired` - it never scores from the title alone and never fabricates posting content.
@@ -74,8 +76,8 @@ Back in the main context, for each scored job:
 
 1. Compute the overall score with the weighting from `04-job-evaluation.md` (Technical 30%, Experience 25%, Behavioral 15%, Career Alignment 30%; location is unweighted).
 2. Map to the framework's verdict bands (Strong Fit 75+, Good Fit 60-74, Moderate Fit 45-59, Weak Fit 30-44, Poor Fit <30).
-3. **Location veto:** `FAIL` (e.g. requires relocation) excludes the job from the shortlist no matter the score - list it separately with the reason. `FLAG` (e.g. heavy travel) stays in the ranking but carries a visible âš  marker for the user to judge.
-4. **Deadline urgency:** a deadline within 7 days gets a ðŸ”¥ marker and wins ties. A deadline that has already passed moves the job to `expired`.
+3. **Location veto:** `FAIL` (e.g. requires relocation) excludes the job from the shortlist no matter the score - list it separately with the reason. `FLAG` (e.g. heavy travel) stays in the ranking but carries a visible `FLAG` marker for the user to judge.
+4. **Deadline urgency:** a deadline within 7 days gets an `URGENT` marker and wins ties. A deadline that has already passed moves the job to `expired`.
 
 Sort by overall score (descending), urgency as tiebreaker.
 
@@ -103,7 +105,7 @@ Ranked <N> new postings (<X> shortlisted, <Y> below threshold, <Z> expired/vetoe
 
 | # | Score | Verdict | Title | Company | Location | Deadline | |
 |---|-------|---------|-------|---------|----------|----------|---|
-| 1 | 78 | Strong Fit | ... | ... | ... | ... | ðŸ”¥ |
+| 1 | 78 | Strong Fit | ... | ... | ... | ... | URGENT |
 
 ### Why these ranked highest
 **1. <Title> at <Company> (78)** - [2-3 strength bullets and the honest gap, from the subagent's findings]

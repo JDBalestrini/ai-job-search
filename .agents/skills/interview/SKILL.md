@@ -8,7 +8,7 @@ context: fork
 
 # interview workflow - Prepare for an Interview on a Tracked Application
 
-You are preparing the user for a real, scheduled interview on one of their applications. The frameworks for this already exist - `07-interview-prep.md` (STAR examples, tough questions, questions to ask, roleplay protocol) and the Company Research Checklist in `04-job-evaluation.md` - and the `the outcome skill` archive records which stage the user is at and what earlier stages surfaced. This command wires them together into a stage-specific prep pack and an optional mock interview.
+You are preparing the user for a real, scheduled interview on one of their applications. The frameworks for this already exist in `private_profile/07-interview-prep.md` (STAR examples, tough questions, questions to ask, roleplay protocol) and the Company Research Checklist in `private_profile/04-job-evaluation.md` - and the `the outcome skill` archive records which stage the user is at and what earlier stages surfaced. This command wires them together into a stage-specific prep pack and an optional mock interview.
 
 `the apply skill` optimizes what the company reads; `the interview skill` optimizes what the company hears. The bridge between them is consistency: the interviewer has read the submitted CV and cover letter, so everything prepared here must match what those documents claim.
 
@@ -36,16 +36,18 @@ v1 preps for a **specific application**. Generic no-target practice is out of sc
 2. **Fallbacks** (the application may predate `the outcome skill`): posting via web fetch on the tracker row's `source` URL, or ask the user to paste it; CV via `cv/main_<company>.tex` and cover letter via `cover_letters/cover_<company>_*.tex`. State plainly which context is missing rather than guessing - and suggest `the outcome skill <company>` to build the archive for next time.
 3. **Ask the user what this interview is** (skip anything `outcome.md` already records): stage (phone screen / technical / case / final round), date, format (phone, video, onsite), and who is interviewing (names and titles, if known).
 4. **Read the frameworks once** - do not re-read them in later steps:
-   - `.agents/skills/job-application-assistant/07-interview-prep.md`
-   - `.agents/skills/job-application-assistant/01-candidate-profile.md`
-   - `.agents/skills/job-application-assistant/02-behavioral-profile.md`
-   - `.agents/skills/job-application-assistant/04-job-evaluation.md`
+   - `private_profile/07-interview-prep.md`
+   - `private_profile/01-candidate-profile.md`
+   - `private_profile/02-behavioral-profile.md`
+   - `private_profile/04-job-evaluation.md`
+
+If any required private profile file is missing, stop and ask the user to run `the setup skill` before interview prep. Do not fall back to tracked placeholder examples for candidate facts.
 
 ---
 
 ## Step 2: Research the Company (Interview-Focused)
 
-Execute the Company Research Checklist that `04-job-evaluation.md` defines: company website (mission, values, recent news), review sites, LinkedIn (team size, recent hires), and media coverage (growth, restructuring, workplace issues).
+Execute the Company Research Checklist that `private_profile/04-job-evaluation.md` defines: company website (mission, values, recent news), review sites, LinkedIn (team size, recent hires), and media coverage (growth, restructuring, workplace issues).
 
 Additions for interview purposes:
 
@@ -68,8 +70,8 @@ Derive from four sources, in priority order:
 4. **The stage type** - phone screens get motivation and timeline questions; technical rounds get the posting's stack; final rounds get values, salary, and "any reservations" questions
 
 ### 2. STAR answer mapping
-Match the ready-made STAR examples in `07-interview-prep.md` to the likely questions using their "Use for" tags. Then:
-- For likely questions **no existing STAR example covers**, draft a new STAR answer grounded strictly in facts from `01-candidate-profile.md` - profile facts arranged into S/T/A/R, not embellished. Include these drafts in the prep pack; offer to append them to `07-interview-prep.md` only if the user explicitly approves.
+Match the ready-made STAR examples in `private_profile/07-interview-prep.md` to the likely questions using their "Use for" tags. Then:
+- For likely questions **no existing STAR example covers**, draft a new STAR answer grounded strictly in facts from `private_profile/01-candidate-profile.md` - profile facts arranged into S/T/A/R, not embellished. Include these drafts in the prep pack; offer to append them to `private_profile/07-interview-prep.md` only if the user explicitly approves.
 - If `the setup skill` left incomplete STAR stubs relevant to this role, surface them: the user should fill in the details before the interview.
 
 ### 3. Consistency brief
@@ -84,13 +86,13 @@ Pick 4-6 from `07`'s categories, customized to the research and the stage: role 
 ### 6. Logistics
 The phone/video tips from `07` when the format calls for them, plus date and interviewer names as a header.
 
-Save the pack to `documents/applications/<company>_<role>the interview skill_prep_<stage>.md` (create the folder if this application predates `the outcome skill`). The folder is gitignored, so the pack stays personal; one file per stage, so earlier packs remain as history. Present the pack in chat as well - the file is the artifact, the conversation is the delivery.
+Save the pack to `documents/applications/<company>_<role>/interview_prep_<stage>.md` (create the folder if this application predates `the outcome skill`). The folder is gitignored, so the pack stays personal; one file per stage, so earlier packs remain as history. Present the pack in chat as well - the file is the artifact, the conversation is the delivery.
 
 ---
 
 ## Step 4: Offer a Mock Interview
 
-Ask if the user wants to practice. If yes, run the roleplay **in this conversation** following the Roleplay Guidelines in `07-interview-prep.md` exactly: warm-up first, then role-specific technical questions, 1-2 behavioral questions tied to the posting's competencies, and one tough question or curveball. After each answer, give brief feedback - what worked, what to sharpen, and which STAR example from the pack would have served better.
+Ask if the user wants to practice. If yes, run the roleplay **in this conversation** following the Roleplay Guidelines in `private_profile/07-interview-prep.md` exactly: warm-up first, then role-specific technical questions, 1-2 behavioral questions tied to the posting's competencies, and one tough question or curveball. After each answer, give brief feedback - what worked, what to sharpen, and which STAR example from the pack would have served better.
 
 Calibrate feedback against `02-behavioral-profile.md`: coach toward the user's natural register, not a generic ideal - the same voice-consistency rule the `the apply skill` reviewer applies to cover letters.
 
@@ -102,7 +104,7 @@ End with:
 
 > Good luck. After the interview, run `the outcome skill <company>` to log the stage and any feedback - it sharpens the prep for the next round, and once the process resolves it feeds your fit-framework calibration via `the setup skill`.
 
-If Step 3 drafted new STAR answers the user approved for keeps, remind them those were appended to `07-interview-prep.md` (or offer again if they deferred).
+If Step 3 drafted new STAR answers the user approved for keeps, remind them those were appended to `private_profile/07-interview-prep.md` (or offer again if they deferred).
 
 ---
 
@@ -112,4 +114,4 @@ If Step 3 drafted new STAR answers the user approved for keeps, remind them thos
 2. **Honesty on gaps.** Weak matches get bridge answers (acknowledge -> adjacent experience -> learning path), never invented experience. Same rule as everywhere else in this repo.
 3. **Verified research only.** Company specifics go in the pack only after independent confirmation. Interviewer notes stick to public professional information.
 4. **Stage-appropriate prep.** A phone screen pack and a final-round pack are different documents; recorded feedback from earlier stages takes priority over generic question lists.
-5. **Write only to the application archive.** The prep pack lands in `documents/applications/<company>_<role>/`; framework and profile files are never edited, except appending user-approved STAR examples to `07-interview-prep.md` on explicit request.
+5. **Write only to ignored private locations.** The prep pack lands in `documents/applications/<company>_<role>/`; tracked framework and example files are never edited. Append user-approved STAR examples only to `private_profile/07-interview-prep.md` on explicit request.

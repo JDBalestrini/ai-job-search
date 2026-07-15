@@ -38,13 +38,37 @@ Optional arguments:
 
 1. Read `job_scraper/seen_jobs.json` (create if missing - start with `{"seen": {}}`)
 2. Read `job_search_tracker.csv` to extract already-applied companies+roles
-3. Read `search-queries.md` (this directory) for the search strategy
+3. Read `private_profile/search-queries.md` for the personalized search strategy. If it does not exist, tell the user to run `the setup skill --section search`; use this skill directory's `search-queries.md` only as the sanitized example format.
+4. Read `private_profile/portal-config.md` for the user's enabled and disabled portal list. If it is missing, create it in `private_profile/` from the sanitized instructions in this skill, then proceed with that private config. Never store a user's enabled/disabled portal selection in tracked files.
 
 ### Step 1: Search
 
-Read `search-queries.md` (this directory) for the search strategy. By default, run the top 3 priority query categories. If the user said "broad", run all categories. If the user specified a focus area (e.g. "data science"), prioritize queries from that category.
+Read `private_profile/search-queries.md` for the search strategy. By default, run the top 3 priority query categories. If the user said "broad", run all categories. If the user specified a focus area (e.g. "data science"), prioritize queries from that category.
 
-**Use the installed CLI tools as the primary search mechanism.** Fall back to `web search` only for portals that do not have a CLI skill, or if `bun` is unavailable on the system.
+**Use the enabled portal CLI tools as the primary search mechanism.** Fall back to `web search` only for enabled portals that do not have a CLI skill, or if `bun` is unavailable on the system.
+
+### Portal Selection
+
+The default portal set comes from ignored private config only:
+
+```text
+private_profile/portal-config.md
+```
+
+The private config should contain:
+
+- `enabled:` portal skill names to run for normal searches.
+- `disabled:` installed portal skill names to skip in normal searches.
+- `manual-fallback:` portals that only generate a URL and should be used only when explicitly useful.
+
+Rules:
+
+1. For a normal search, run only portals listed under `enabled`.
+2. Do not invoke portals listed under `disabled`.
+3. If the user explicitly names a disabled portal, such as `jobindex-search`, run only that requested portal and clearly note that it is disabled by default.
+4. If a portal is not listed in either section, treat it as disabled until the private config is updated.
+5. Do not infer default portals from installed folders alone. Installed portal folders may be reference implementations.
+6. Do not write the enabled/disabled list to tracked files.
 
 #### 1a. Check bun availability
 
@@ -56,28 +80,28 @@ If this fails (bun not installed), skip to **1c (web search fallback)** for all 
 
 #### 1b. Run CLI tools (primary - run these in parallel where possible)
 
-Discover all installed portal CLI skills by reading every `SKILL.md` found under `.agents/skills/*/SKILL.md`. Each file documents that portal's exact CLI flags and usage examples. **Use each portal's own documented interface - do not guess flags.** This approach automatically includes any new portals added via `the add-portal skill` without requiring changes to this file.
+Discover installed portal CLI skills by reading `SKILL.md` files under `.agents/skills/*/SKILL.md`, then filter that installed set through `private_profile/portal-config.md`. Each enabled or explicitly requested portal documents its exact CLI flags and usage examples. **Use each portal's own documented interface - do not guess flags.** New portals added via `the add-portal skill` are available only after they are added to the private enabled list or explicitly requested by name.
 
-For each installed portal skill:
+For each enabled or explicitly requested portal skill:
 
 1. Read its `SKILL.md` to find the correct `bun run ...` invocation and supported flags.
-2. Translate the query terms from `search-queries.md` into that portal's flag format (e.g. `--key`, `--search-string`, `--query`, filter codes - whatever the portal's SKILL.md specifies).
+2. Translate the query terms from `private_profile/search-queries.md` into that portal's flag format (e.g. `--key`, `--search-string`, `--query`, filter codes - whatever the portal's SKILL.md specifies).
 3. Scope to the last 14 days using the portal's supported recency flag (`--jobage`, `--since <YYYY-MM-DD>`, `--order PublicationDate`, etc. - as documented per portal).
 4. Cap results to ~20 per call using the portal's limit flag.
 5. Use `--format json` for machine-readable output.
 
-Run all portal CLI calls in parallel where possible using the Codex subagent workflow. Collect all `results` arrays into a single pool for Step 2, keeping each result tagged with its source portal skill (for Step 2 `detail` lookups).
+Run all selected portal CLI calls in parallel where possible using the Codex subagent workflow. Collect all `results` arrays into a single pool for Step 2, keeping each result tagged with its source portal skill (for Step 2 `detail` lookups).
 
 If a CLI tool exits with a non-zero code, log the error message and continue - do not abort the whole search.
 
 #### 1c. web search fallback
 
 Use `web search` for:
-- Portals listed in `search-queries.md` that do **not** have a corresponding directory under `.agents/skills/`
+- Portals listed in `private_profile/search-queries.md` that do **not** have a corresponding directory under `.agents/skills/`
 - Any portal whose CLI fails at runtime
 - When bun is unavailable (Step 1a failed)
 
-Use the site-specific query strings from `search-queries.md` directly as web search queries for these portals.
+Use the site-specific query strings from `private_profile/search-queries.md` directly as web search queries for enabled or explicitly requested portals only.
 
 ### Step 2: Fetch & Parse
 
@@ -94,6 +118,7 @@ fields manually.
 For every candidate:
 - Skip if the URL or company+title combo already exists in `seen_jobs.json`
 - Skip if the company+role already appears in `job_search_tracker.csv`
+- When the same posting appears through multiple portal CLIs, deduplicate by a normalized key made from employer, title, city/province, and canonical application URL when available. Preserve source provenance by retaining each contributing portal URL/source id in notes or additive fields; do not present duplicate rows for the same job.
 
 ### Step 3: Quick Fit Assessment
 

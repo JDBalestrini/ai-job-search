@@ -24,14 +24,19 @@ When the user provides a job posting (URL or text), follow this workflow:
 - Ask the user if they want to proceed with an application
 
 ### Step 2: Tailor CV
-- Read the most relevant existing CV variant from `cv/` as a starting point
+- Read `private_profile/01-candidate-profile.md` as the authoritative source of candidate facts
+- Use any existing CV only as supporting evidence or visual reference; do not copy a populated resume as the draft
 - Follow the guidelines in `05-cv-templates.md`
+- Extract the posting's requirements, score candidate roles/projects/skills/bullets for relevance, then select, shorten, omit, and reorder content before writing LaTeX
 - Create `cv/main_<company>.tex` with tailored content
-- Adjust: profile statement, skills section, experience bullet emphasis, section order
+- Adjust: selected experiences/projects, skills section, bullet wording, bullet order, and section order when justified
+- Compile and check against the active template page limit; if over the limit, return to content selection rather than compressing the visual design
+- Compare the generated CV against the master resume and revise if it is effectively a full copy with only minor edits
 
 ### Step 3: Write Cover Letter
 - Follow the writing style rules in `03-writing-style.md` (critical: no em-dashes, no cliches)
 - Follow the template structure in `06-cover-letter-templates.md`
+- When the active CV template is `jd-resume`, use the matching `templates/cover-letter/jd-resume/template.tex` cover-letter template and compile it with LuaLaTeX
 - Create `cover_letters/cover_<company>_<role>.tex`
 - Ensure the letter connects specific experience to the role requirements
 
