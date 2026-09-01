@@ -17,7 +17,7 @@ Codex helps with:
 
 The `setup` skill writes candidate facts to `private_profile/`. That directory is gitignored and must never be tracked. Until setup has populated private profile files, do not infer missing candidate facts.
 
-Expected private files:
+Legacy optional private workflow-configuration files:
 
 - `private_profile/01-candidate-profile.md`
 - `private_profile/02-behavioral-profile.md`
@@ -28,6 +28,16 @@ Expected private files:
 - `private_profile/07-interview-prep.md`
 - `private_profile/search-queries.md`
 - `private_profile/cv/main.tex` or another private master CV source
+
+When `private_profile/profile.yaml` is present, it and the evidence-bank files are the candidate-fact source contract:
+
+1. `profile.yaml` is the structured source of truth.
+2. `evidence/*.md` supplies detailed, atomic evidence, provenance, attribution boundaries, and work-status distinctions.
+3. Supporting private Markdown (`experience.md`, `projects.md`, `skills.md`, `achievements.md`, `preferences.md`, `source_audit.md`, and `NEEDS_CONFIRMATION.md`) supplies indexes, preferences, and conflict handling.
+4. A private master CV is supporting evidence and approved wording only, never the default source for a lightly rewritten application.
+5. Public links are provenance/update sources; do not browse them on every application unless verification is needed.
+
+Search all applicable evidence for every posting and select it by that posting's requirements. Do not impose a fixed employer, recency, or project priority. When `NEEDS_CONFIRMATION.md` identifies a material conflict, use safe wording or flag it; never choose a version arbitrarily.
 
 Tracked files under `.agents/skills/job-application-assistant/`, `.agents/skills/job-scraper/search-queries.md`, `cv/main_example.tex`, and `cover_letters/cover_example.tex` are sanitized examples and structural references only. Do not replace their placeholders with real candidate information.
 

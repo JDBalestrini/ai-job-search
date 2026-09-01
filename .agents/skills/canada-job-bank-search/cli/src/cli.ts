@@ -78,6 +78,13 @@ function clean(html: string | undefined | null): string | null {
   return value || null
 }
 
+function extractDeadline(html: string): string | null {
+  const schema = html.match(/"validThrough"\s*:\s*"(\d{4}-\d{2}-\d{2})/i)
+  if (schema) return schema[1]
+  const label = html.match(/(?:application deadline|closing date|apply by)[\s\S]{0,100}?(\d{4}-\d{2}-\d{2})/i)
+  return label?.[1] ?? null
+}
+
 async function fetchText(url: string): Promise<string> {
   const response = await fetch(url, {
     headers: {
@@ -178,7 +185,7 @@ async function runDetail(idOrUrl: string, flags: Flags): Promise<number> {
   const location = clean(pageTitle?.match(/\s+-\s+([^-\n]+,\s*[A-Z]{2})\s+-\s+Job posting/i)?.[1]) ?? clean(html.match(/Location\s+([^<\n]+?,\s*[A-Z]{2})/i)?.[1])
   const loc = splitLocation(location)
   const description = clean(html.match(/<main[\s\S]*?<\/main>/i)?.[0] ?? html.match(/<body[\s\S]*?<\/body>/i)?.[0])
-  return outputDetail({ id, title, company, location, city: loc.city, province: loc.province, country: loc.country, remote: null, date: null, closingDate: null, employmentType: null, salary: null, url: `${BASE}/jobsearch/jobposting/${id}`, applyUrl: `${BASE}/jobsearch/jobposting/${id}`, portal: PORTAL, sourceId: id, description }, String(flags.format || "json"))
+  return outputDetail({ id, title, company, location, city: loc.city, province: loc.province, country: loc.country, remote: null, date: null, closingDate: extractDeadline(html), employmentType: null, salary: null, url: `${BASE}/jobsearch/jobposting/${id}`, applyUrl: `${BASE}/jobsearch/jobposting/${id}`, portal: PORTAL, sourceId: id, description }, String(flags.format || "json"))
 }
 
 const HELP = `canada-job-bank-search — search Canadian jobs

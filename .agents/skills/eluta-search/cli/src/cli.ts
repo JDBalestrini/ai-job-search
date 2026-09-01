@@ -78,6 +78,13 @@ function clean(html: string | undefined | null): string | null {
   return value || null
 }
 
+function extractDeadline(html: string): string | null {
+  const schema = html.match(/"validThrough"\s*:\s*"(\d{4}-\d{2}-\d{2})/i)
+  if (schema) return schema[1]
+  const label = html.match(/(?:application deadline|closing date|apply by)[\s\S]{0,100}?(\d{4}-\d{2}-\d{2})/i)
+  return label?.[1] ?? null
+}
+
 async function fetchText(url: string): Promise<string> {
   const response = await fetch(url, {
     headers: {
@@ -169,7 +176,7 @@ async function runDetail(idOrUrl: string, flags: Flags): Promise<number> {
   const loc = splitLocation(location)
   const description = clean(html.match(/class="description"[\s\S]*?(?=<div|<section|<\/body>)/i)?.[0] ?? html)
   const id = url.match(/([a-f0-9]{24,})/i)?.[1] ?? url
-  return outputDetail({ id, title, company, location, city: loc.city, province: loc.province, country: loc.country, remote: null, date: null, closingDate: null, employmentType: null, salary: null, url, applyUrl: url, portal: PORTAL, sourceId: id, description }, String(flags.format || "json"))
+  return outputDetail({ id, title, company, location, city: loc.city, province: loc.province, country: loc.country, remote: null, date: null, closingDate: extractDeadline(html), employmentType: null, salary: null, url, applyUrl: url, portal: PORTAL, sourceId: id, description }, String(flags.format || "json"))
 }
 
 const HELP = `eluta-search — search Canadian jobs

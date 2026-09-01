@@ -31,13 +31,18 @@ Follow these steps **exactly in order**. Do not skip steps.
 
 ## Step 1: DRAFTER - Evaluate Fit
 
-Read the evaluation framework:
-- `private_profile/04-job-evaluation.md`
-- `private_profile/01-candidate-profile.md`
+Load candidate evidence before evaluating:
+- `private_profile/profile.yaml` (required when the evidence bank is present)
+- every `private_profile/evidence/*.md`
+- `private_profile/experience.md`, `projects.md`, `skills.md`, `achievements.md`, `preferences.md`, `source_audit.md`, `links.md`, and `NEEDS_CONFIRMATION.md`
+- `private_profile/04-job-evaluation.md` only when it exists, for an optional scoring framework
+- `private_profile/01-candidate-profile.md` only when it exists, as legacy supporting material rather than a replacement for the evidence bank
 
-If either private profile file is missing, stop and ask the user to run `the setup skill` before applying. Do not fall back to tracked placeholder examples for candidate facts.
+If neither a populated `profile.yaml` nor a populated legacy candidate profile exists, stop and ask the user to run `the setup skill`. Do not fall back to tracked placeholder examples for candidate facts.
 
-Using the framework from `04-job-evaluation.md`, evaluate the job posting against the candidate's profile. Extract and retain a requirement map for later CV tailoring:
+Use this hierarchy: `profile.yaml` -> detailed evidence -> supporting Markdown -> private master CV -> public links. `links.md` is a provenance index, not a requirement to browse on every application. Search all evidence sources for every posting. Do not give employers, projects, or recent roles a permanent preference. Treat `NEEDS_CONFIRMATION.md` as binding: use safe language or flag a material conflict rather than choosing a value.
+
+Using the available evaluation framework and the full evidence bank, evaluate the job posting. Extract and retain a requirement map for later CV tailoring:
 
 - **Required qualifications:** named tools, education, experience level, responsibilities, and must-have competencies.
 - **Preferred qualifications:** nice-to-have tools, domain experience, soft skills, and company/team signals.
@@ -65,16 +70,20 @@ After presenting the evaluation, ask the user:
 
 **If the user says no, stop here.** If yes, continue to Step 2.
 
+### Step 1b: Create the private application record (after approval, before drafting)
+
+Use `tools/application_state.py` to create or update the one canonical private tracker row for this approved posting. Save the exact resolved posting text to the returned archive folder as `job_posting.md`; never replace an existing archived posting. Supply company, role, location, canonical source URL, and the posting deadline when explicitly known. Unknown deadlines remain blank: never infer one from posting age.
+
+The helper canonicalizes tracking parameters in URLs, rejects archive/artifact path escape, and matches an existing row by canonical source URL or normalized company+role. Re-running the same posting must update that row, never append a duplicate. It creates the row with status `approved`; do not create a tracker row merely for an unapproved fit evaluation.
+
 ---
 
 ## Step 2: DRAFTER - Draft CV + Cover Letter
 
-You already have `01-candidate-profile.md` and `04-job-evaluation.md` in context from Step 1. **Do not re-read them.**
+You already have the evidence bank and any available evaluation framework in context from Step 1. **Do not re-read them.**
 
 Read only the reference files you do not yet have:
-- `private_profile/03-writing-style.md`
-- `private_profile/05-cv-templates.md`
-- `private_profile/06-cover-letter-templates.md`
+- `private_profile/03-writing-style.md`, `05-cv-templates.md`, and `06-cover-letter-templates.md` when they exist
 
 If `private_profile/05-cv-templates.md` contains an `ACTIVE-TEMPLATE` managed block, read the referenced manifest and template skeleton before drafting. Use the skeleton's commands, section order, margins, spacing, page limit, and class/style dependencies as authoritative where they conflict with stock moderncv guidance. If the referenced template is missing or fails to compile, tell the user and fall back to the stock `cv/main_example.tex` moderncv template only with explicit user approval.
 
@@ -86,7 +95,7 @@ Also read one existing cover letter file as a concrete structural reference:
 - Read any existing `cover_letters/cover_*.tex` or `cover_letters/Cover_*.tex` file as a template reference.
 
 For the CV, separate facts from wording and layout:
-- `private_profile/01-candidate-profile.md` is the authoritative fact store for candidate facts.
+- `private_profile/profile.yaml` is the authoritative structured fact store when present; detailed evidence files are the authoritative source for atomic contributions, technical context, outcomes, attribution, and status. Legacy `01-candidate-profile.md` is supporting material only.
 - `private_profile/main.tex` or `private_profile/cv/main.tex` may be read only as supporting evidence and visual reference for the candidate's existing resume style. It is **not** the output template, not the primary source of truth, and not a file to copy with minor edits.
 - The active template skeleton (`templates/cv/.../template.tex`) or stock `cv/main_example.tex` defines the LaTeX structure and commands. Generate a fresh `cv/main_<company>.tex` from that skeleton.
 - Preserve exact dates, titles, employers, education, contact facts, and metrics from the private profile. Rewrite only wording/emphasis; never alter factual meaning.
@@ -95,7 +104,7 @@ For the CV, separate facts from wording and layout:
 
 Before drafting the CV source, build a concise tailoring ledger in memory using the requirement map from Step 1. Do not write this ledger to tracked files; include a summary in Step 6.
 
-For every candidate role, project, skill group, education item, award group, and source bullet in `01-candidate-profile.md`:
+For every candidate role, project, skill group, education item, award group, and atomic evidence item found across the evidence bank:
 
 1. Score relevance to the posting:
    - 3 = directly matches a required qualification or core responsibility.
@@ -125,6 +134,8 @@ Selection rules:
 - Section ordering may change when justified by the posting, unless an active template manifest explicitly forbids it. If the manifest says to preserve section order, preserve the top-level order but still tailor the content within each section.
 - Rewrite selected bullets for emphasis and clarity using job language only where the underlying profile supports it.
 - Do not require artificial paraphrasing when an existing bullet is already optimal and relevant; exact reuse is acceptable for individual high-signal bullets.
+- Build new bullets from the relevant subset of atomic facts; existing resume bullets are not indivisible units.
+- Distinguish individual contributions from team context, completed work from in-progress/planned work, and projected outcomes from realized outcomes.
 
 ### Step 2b: Anti-Copy Safeguard (mandatory after drafting CV)
 
@@ -158,6 +169,7 @@ If the safeguard fails:
 - Use the stock `cover.cls` template only when no active matching cover-letter template is configured or the user approves fallback after a matching-template failure
 - For the `jd-resume` cover-letter template, use the structured `\recipientrow{company}{street}{city, province/state}{postal/ZIP}{country}{date}` macro. Verify company address fields from the posting, official company pages, or authoritative listings; do not guess street addresses.
 - Tailor the opening paragraph to the specific role and company
+- Select cover-letter examples independently from the full evidence bank; do not merely summarize the generated CV.
 - Address to a named person if available in the posting, otherwise "Dear Hiring Manager" (or equivalent in posting language)
 - Keep concise, but cover letters may exceed one page when the extra content is useful, specific, and grounded
 - Mention a named AI tool only when the candidate profile explicitly documents that the candidate used that tool in the underlying work being described. Using Codex to prepare this application is not evidence that the candidate used Codex in a job, project, or achievement.
@@ -391,6 +403,8 @@ Summarize 3-5 key decisions made to tailor the application and include the CV ta
 List the files written:
 - `cv/main_<company>.tex`
 - `cover_letters/cover_<company>_<role>.tex`
+
+Update the same private application record with status `ready`, the generated CV and cover-letter paths, the source URL, and the explicitly known deadline. Copy the final submitted `.tex` sources to the archive as `cv_draft.tex` and `cover_letter.tex` only when the user confirms submission; the archive must preserve what was actually sent, not an earlier draft.
 
 Tell the user: "Both files are ready for your review. Open them to check the final output before compiling."
 

@@ -78,6 +78,13 @@ function clean(html: string | undefined | null): string | null {
   return value || null
 }
 
+function extractDeadline(html: string): string | null {
+  const schema = html.match(/"validThrough"\s*:\s*"(\d{4}-\d{2}-\d{2})/i)
+  if (schema) return schema[1]
+  const label = html.match(/(?:application deadline|closing date|apply by)[\s\S]{0,100}?(\d{4}-\d{2}-\d{2})/i)
+  return label?.[1] ?? null
+}
+
 async function fetchText(url: string): Promise<string> {
   const response = await fetch(url, {
     headers: {
@@ -173,7 +180,7 @@ function fromJob(job: any): JobResult {
     country: job.location?.countryName || loc.country,
     remote: job.workplace ?? null,
     date: job.created ?? null,
-    closingDate: null,
+    closingDate: extractDeadline(JSON.stringify(job)),
     employmentType: job.employmentType || null,
     salary: clean(job.benefitsSection?.match(/Salary[^<]*/i)?.[0] ?? null),
     url: job.url,

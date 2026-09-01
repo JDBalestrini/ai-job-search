@@ -23,6 +23,7 @@ private_profile/
 salary_data.json
 salary_data*.json
 job_scraper/seen_jobs.json
+job_scraper/*.json
 job_scraper/*.md
 *_BehavioralReport.pdf
 linkedin_Profile.pdf

@@ -55,6 +55,7 @@ REQUIRED_IGNORE_RULES = [
     "salary_data.json",
     "salary_data*.json",
     "job_scraper/seen_jobs.json",
+    "job_scraper/*.json",
     "cv/main_*.tex",
     "!cv/main_example.tex",
     "cv/main_*.pdf",

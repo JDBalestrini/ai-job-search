@@ -12,6 +12,18 @@ You are running the onboarding setup for the AI Job Search framework. Your goal 
 
 There are three paths into setup. Step 0 picks the right one; all three converge on Step 3 (file generation) and Step 4 (confirmation).
 
+## Evidence-bank preflight (always run first)
+
+Before selecting a path, check for `private_profile/profile.yaml`. If it exists and is populated, the candidate already has an evidence bank. Read `private_profile/README.md`, `profile.yaml`, every `private_profile/evidence/*.md`, the supporting Markdown files, and `NEEDS_CONFIRMATION.md` before proposing any profile change.
+
+- Do not run a setup path that overwrites, flattens, regenerates, or replaces this evidence bank.
+- Treat `profile.yaml` as structured source of truth; detailed evidence files contain the atomic facts needed for job-specific selection.
+- Treat `NEEDS_CONFIRMATION.md` as a hard conflict boundary: preserve safe wording or ask the candidate, never silently select a conflicting value.
+- Existing legacy `01`–`07` files, if present, are optional workflow configuration. Create or update them only with explicit candidate approval and never by copying or condensing the evidence bank into them.
+- If the user asks to import new material, merge it additively into the relevant evidence/source-audit files after showing proposed changes. Preserve provenance, team-versus-personal attribution, and completed/in-progress/planned distinctions.
+
+When this preflight succeeds, state that the evidence bank is already populated and offer update-only paths; do not present onboarding as though the profile were empty.
+
 ---
 
 ## Step 0: Welcome & Choose Path
@@ -340,7 +352,7 @@ Once data collection is complete, generate or finish populating the following ig
 
 Before writing, create `private_profile/` and `private_profile/cv/` if they do not exist. Do not write candidate facts into `AGENTS.md`, `.agents/skills/`, `cv/main_example.tex`, `cover_letters/cover_example.tex`, README files, or other tracked files.
 
-### 1. Populate `private_profile/01-candidate-profile.md` *(Path B and C; skip if Path A populated it)*
+### 1. Populate `private_profile/01-candidate-profile.md` *(Path B and C; skip if Path A populated it or an evidence bank exists)*
 Write the full candidate profile with structured sections: Identity, Education, Professional Experience, Independent Projects, Technical Skills, Publications, Awards, References.
 
 ### 2. Populate `private_profile/02-behavioral-profile.md` *(Path B and C; skip if Path A populated it)*
@@ -367,6 +379,7 @@ Add cover-letter patterns and reusable structures grounded in the user's actual 
 Create STAR examples from their actual experience (at least 3-4 examples). Path A leaves STAR stubs under "## STAR Candidates (Complete Manually)" rather than full examples; if any stubs are present, mention them in Step 4 so the user knows to flesh them out.
 
 ### 8. Generate `private_profile/cv/main.tex`
+Skip this step when an evidence bank exists unless the user specifically asks to create or update a private master CV.
 Create the user's private master CV source as a private evidence document and visual reference, not as the future application output template. If `private_profile/05-cv-templates.md` has an active template override, use that template skeleton and manifest as the structural reference. Otherwise, use `cv/main_example.tex` as the stock moderncv structural reference. Replace placeholders with the user's actual name, contact info, education, and representative source-backed experience entries only in `private_profile/cv/main.tex`. Leave tracked templates sanitized.
 
 When writing or updating `private_profile/05-cv-templates.md`, make the source contract explicit:

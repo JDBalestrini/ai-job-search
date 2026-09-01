@@ -18,13 +18,14 @@ When the user provides a job posting (URL or text), follow this workflow:
 - Fetch the job posting content (use web fetch for URLs)
 - Analyze the posting for required competencies, keywords, and priorities
 - Research the company (website, LinkedIn, mission, recent news)
-- Score the posting against the candidate's profile using the framework in `04-job-evaluation.md`
+- Load the evidence bank using `profile.yaml` -> `evidence/*.md` -> supporting private Markdown -> master CV, then score the posting against it. Search all evidence for the current posting; do not default to resume order or permanently prioritize employers/projects.
+- Respect `NEEDS_CONFIRMATION.md`, provenance, team-versus-personal attribution, and completed/in-progress/planned status distinctions.
 - Present the evaluation table and verdict
 - Suggest whether the candidate should call the employer before applying (see `04-job-evaluation.md` for guidance)
 - Ask the user if they want to proceed with an application
 
 ### Step 2: Tailor CV
-- Read `private_profile/01-candidate-profile.md` as the authoritative source of candidate facts
+- Read `private_profile/profile.yaml` as the authoritative structured source when present, and use `private_profile/evidence/*.md` for atomic job-specific evidence; legacy `01-candidate-profile.md` is supporting material only
 - Use any existing CV only as supporting evidence or visual reference; do not copy a populated resume as the draft
 - Follow the guidelines in `05-cv-templates.md`
 - Extract the posting's requirements, score candidate roles/projects/skills/bullets for relevance, then select, shorten, omit, and reorder content before writing LaTeX
@@ -52,7 +53,8 @@ When the user provides a job posting (URL or text), follow this workflow:
 
 | File | Purpose |
 |------|---------|
-| `01-candidate-profile.md` | Education, experience, skills, publications, awards |
+| `profile.yaml` + `evidence/*.md` | Structured source of truth plus detailed atomic, provenance-aware evidence |
+| `01-candidate-profile.md` (optional legacy) | Supporting candidate facts/configuration when present |
 | `02-behavioral-profile.md` | Behavioral assessment, strengths, ideal environments |
 | `03-writing-style.md` | Tone, structure, do's and don'ts |
 | `04-job-evaluation.md` | Scoring framework for job fit |

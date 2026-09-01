@@ -35,13 +35,12 @@ v1 preps for a **specific application**. Generic no-target practice is out of sc
    - `outcome.md` - the stage reached so far and any recorded feedback from earlier stages. Feedback from stage N is the highest-value input for stage N+1 prep.
 2. **Fallbacks** (the application may predate `the outcome skill`): posting via web fetch on the tracker row's `source` URL, or ask the user to paste it; CV via `cv/main_<company>.tex` and cover letter via `cover_letters/cover_<company>_*.tex`. State plainly which context is missing rather than guessing - and suggest `the outcome skill <company>` to build the archive for next time.
 3. **Ask the user what this interview is** (skip anything `outcome.md` already records): stage (phone screen / technical / case / final round), date, format (phone, video, onsite), and who is interviewing (names and titles, if known).
-4. **Read the frameworks once** - do not re-read them in later steps:
-   - `private_profile/07-interview-prep.md`
-   - `private_profile/01-candidate-profile.md`
-   - `private_profile/02-behavioral-profile.md`
-   - `private_profile/04-job-evaluation.md`
+4. **Read the frameworks and evidence once** - do not re-read them in later steps:
+   - `private_profile/profile.yaml`, every `private_profile/evidence/*.md`, and supporting private Markdown files including `links.md` and `NEEDS_CONFIRMATION.md`
+   - `private_profile/07-interview-prep.md`, `02-behavioral-profile.md`, and `04-job-evaluation.md` only when they exist
+   - `private_profile/01-candidate-profile.md` only when it exists, as legacy support
 
-If any required private profile file is missing, stop and ask the user to run `the setup skill` before interview prep. Do not fall back to tracked placeholder examples for candidate facts.
+If neither a populated `profile.yaml` nor a populated legacy candidate profile exists, stop and ask the user to run `the setup skill` before interview prep. Do not fall back to tracked placeholder examples for candidate facts. Use the evidence hierarchy and preserve every attribution, conflict, and completed/in-progress/planned distinction.
 
 ---
 
@@ -70,8 +69,8 @@ Derive from four sources, in priority order:
 4. **The stage type** - phone screens get motivation and timeline questions; technical rounds get the posting's stack; final rounds get values, salary, and "any reservations" questions
 
 ### 2. STAR answer mapping
-Match the ready-made STAR examples in `private_profile/07-interview-prep.md` to the likely questions using their "Use for" tags. Then:
-- For likely questions **no existing STAR example covers**, draft a new STAR answer grounded strictly in facts from `private_profile/01-candidate-profile.md` - profile facts arranged into S/T/A/R, not embellished. Include these drafts in the prep pack; offer to append them to `private_profile/07-interview-prep.md` only if the user explicitly approves.
+Match ready-made STAR examples in `private_profile/07-interview-prep.md` when present, then search the full evidence bank (including evidence absent from the submitted CV) for the strongest relevant technical debugging, iteration, design-decision, tradeoff, leadership, project-management, or outcome example. Then:
+- For likely questions **no existing STAR example covers**, draft a new STAR answer grounded strictly in selected evidence-bank facts - facts arranged into S/T/A/R, not embellished. Include these drafts in the prep pack; offer to append them to `private_profile/07-interview-prep.md` only if the user explicitly approves.
 - If `the setup skill` left incomplete STAR stubs relevant to this role, surface them: the user should fill in the details before the interview.
 
 ### 3. Consistency brief

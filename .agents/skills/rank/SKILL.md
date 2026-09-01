@@ -33,11 +33,11 @@ Follow these steps **in order**.
 2. Read `job_search_tracker.csv`. Build the exclusion set: any company+role already in the tracker is out of scope regardless of flags - it has been applied to or consciously tracked.
 3. Select candidates: entries with status `new` (or all non-applied entries with `--all`), minus the exclusion set, filtered by the focus area if one was given.
 4. If no candidates remain, say so ("Nothing new to rank - run the job-scraper skill to find fresh postings") and stop.
-5. Read the scoring framework and profile **once**:
-   - `private_profile/04-job-evaluation.md`
-   - `private_profile/01-candidate-profile.md`
+5. Read the candidate evidence once: `private_profile/profile.yaml`, every `private_profile/evidence/*.md`, and the supporting private Markdown files (`experience.md`, `projects.md`, `skills.md`, `achievements.md`, `preferences.md`, `source_audit.md`, `links.md`, and `NEEDS_CONFIRMATION.md`). Also read `04-job-evaluation.md` and `01-candidate-profile.md` only if they exist as optional legacy configuration/support.
 
-If either private profile file is missing, stop and ask the user to run `the setup skill` before ranking. Do not fall back to tracked placeholder examples for candidate facts.
+If neither a populated `profile.yaml` nor a populated legacy candidate profile exists, stop and ask the user to run `the setup skill` before ranking. Do not fall back to tracked placeholder examples for candidate facts.
+
+Use `profile.yaml` -> detailed evidence -> supporting Markdown -> master CV as the source hierarchy. Search the complete evidence bank against each actual posting. Do not make unresolved entries in `preferences.md` into inferred preferences, and do not resolve conflicts from `NEEDS_CONFIRMATION.md` arbitrarily.
 
 State how many jobs will be ranked before proceeding.
 
@@ -47,7 +47,7 @@ State how many jobs will be ranked before proceeding.
 
 Dispatch parallel `general-purpose` subagents via the **Codex subagent workflow**, ~5 jobs per subagent (a single subagent is fine for <=5 jobs). Token-efficiency rules, consistent with `the apply skill`:
 
-- Pass each subagent everything it needs **inline in the prompt** - the job list (title, company, URL) and a compact scoring rubric extracted from the files you read in Step 1: the strong/moderate/weak skill match areas, direct/adjacent experience domains, behavioral thrive/drain factors, career goals, deal-breakers, and the location constraints. Do **not** make agents re-read the profile files.
+- Pass each subagent everything it needs **inline in the prompt** - the job list (title, company, URL), scoring rubric, and a compact, posting-specific evidence selection drawn by searching the full bank. Include only source-backed strengths, adjacent evidence, genuine gaps, confirmed preferences, and conflict-safe wording. Do **not** make agents re-read profile files.
 - subagents fetch each posting URL with web fetch and score **only from actually fetched content**. If a URL is dead, redirects to a listing page, or the posting has expired, the subagent marks that job `expired` - it never scores from the title alone and never fabricates posting content.
 - Scope is triage: posting text vs. rubric. **No company research, no salary lookup, no web searches** - that depth belongs to `the apply skill`.
 

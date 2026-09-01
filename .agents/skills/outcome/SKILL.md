@@ -32,11 +32,11 @@ Follow these steps **in order**.
 
 1. Read `job_search_tracker.csv`. If it does not exist, create it with the standard header:
    ```
-   date,company,sector,role,role_type,channel,status,contact_person,fit_rating,notes,cv_file,cover_letter_file,source
+   date,company,sector,role,role_type,channel,status,contact_person,fit_rating,notes,cv_file,cover_letter_file,source,location,deadline,archive_dir
    ```
 2. **With an argument:** match rows case-insensitively on company (and role, if given). One match -> proceed. Several -> list them and ask. None -> the application was made outside the workflow; collect company, role, date applied, channel, and posting URL from the user and add a tracker row.
 3. **Without an argument:** list all rows whose status is not final (not hired / rejected / no response / withdrawn / offer declined) as a numbered table (company, role, date applied, current status) and ask which to update. If every row is resolved, say so and stop.
-4. Derive the archive folder name: `documents/applications/<company>_<role>/` - lowercase, underscores for spaces (the convention documented in `documents/README.md`). Check whether the folder and an `outcome.md` already exist - if so, you are updating, not creating.
+4. Derive the archive folder name with `tools/application_state.py`'s safe slug rule. Check whether the folder and an `outcome.md` already exist - if so, you are updating, not creating. Preserve the tracker `deadline` exactly as stored; do not infer or overwrite an unknown deadline.
 
 ---
 

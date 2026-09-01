@@ -69,6 +69,7 @@ Rules:
 4. If a portal is not listed in either section, treat it as disabled until the private config is updated.
 5. Do not infer default portals from installed folders alone. Installed portal folders may be reference implementations.
 6. Do not write the enabled/disabled list to tracked files.
+7. A portal listed under `manual-fallback` generates a user-facing link only. Its placeholder result is not a job posting and must not enter the normalized pool, deduplication state, ranking, or tracker.
 
 #### 1a. Check bun availability
 
@@ -119,6 +120,7 @@ For every candidate:
 - Skip if the URL or company+title combo already exists in `seen_jobs.json`
 - Skip if the company+role already appears in `job_search_tracker.csv`
 - When the same posting appears through multiple portal CLIs, deduplicate by a normalized key made from employer, title, city/province, and canonical application URL when available. Preserve source provenance by retaining each contributing portal URL/source id in notes or additive fields; do not present duplicate rows for the same job.
+- Normalize the deadline from the portal's `closingDate`/detail result into `deadline`. Preserve `null` when unknown. Do not derive it from the posting date or scrape date.
 
 ### Step 3: Quick Fit Assessment
 
@@ -138,6 +140,9 @@ For each new job, do a rapid fit check (NOT the full evaluation from `04-job-eva
       "title": "...",
       "company": "...",
       "url": "...",
+      "canonical_url": "...",
+      "deadline": "YYYY-MM-DD or null",
+      "sources": [{"portal": "...", "source_id": "...", "url": "..."}],
       "first_seen": "YYYY-MM-DD",
       "fit": "high/medium/low",
       "status": "new/skipped/evaluated/ranked/expired"
@@ -179,7 +184,7 @@ If the run found many new jobs (roughly 8+), also suggest `the rank skill` - it 
 
 ### Step 6: Update Tracker (Optional)
 
-If the user decides to apply to any job, add a row to `job_search_tracker.csv`.
+Do not add a tracker row during scraping. The `apply` workflow creates exactly one row only after the candidate approves drafting, and carries the canonical URL, location, and explicit deadline into the archive/tracker record.
 
 ---
 

@@ -115,6 +115,8 @@ applications/
 
 **`job_posting.md`** — Paste the full job posting text here. Used by `setup` skill to infer which skills and role types you have targeted, and to calibrate `04-job-evaluation.md`.
 
+The private tracker stores the canonical posting URL, location, and deadline when the posting explicitly provides one. A missing deadline remains unknown; it is never derived from a posting date.
+
 **`cover_letter.tex`** — The cover letter you actually submitted. Used to extract writing style patterns and structure for `06-cover-letter-templates.md`.
 
 **`cv_draft.tex`** — The CV variant you submitted. Used to extract profile statement styles for `05-cv-templates.md`.
